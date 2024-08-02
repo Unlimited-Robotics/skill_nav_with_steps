@@ -9,6 +9,6 @@ class CommonType:
         self.type = type
         self.fsm = CommonTypeFSM(
             self_object=self,
-            name='CommonFSMType', 
+            name=self.name, 
             log_transitions=True,
         )
