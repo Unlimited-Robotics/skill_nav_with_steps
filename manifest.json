@@ -1,5 +1,5 @@
 {
-    "name": "skill_template",
+    "name": "skill_nav_with_steps",
     "description": "",
     "type": "skill",
     "version": "0.0.0.dev",
@@ -10,11 +10,11 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/Unlimited-Robotics/skill_template"
+        "url": "https://github.com/Unlimited-Robotics/skill_nav_with_steps"
     },
     "license": "MIT",
     "author": {
-        "name": "template user",
-        "url": "template email"
+        "name": "Santiago",
+        "url": "santiago@unlimitedrobotics.com"
     }
 }

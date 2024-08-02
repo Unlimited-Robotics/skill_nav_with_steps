@@ -1,7 +1,7 @@
 from raya.application_base import RayaApplicationBase
-
-from skills.skill_template import SkillTemplate
 from raya.exceptions import RayaSkillAborted
+
+from skills.NavSteps import SkillNavSteps
 
 
 class RayaApplication(RayaApplicationBase):
@@ -9,18 +9,23 @@ class RayaApplication(RayaApplicationBase):
     async def setup(self):
         self.log.info(f'RayaApplication.setup')
 
-        self.skill_template = self.register_skill(SkillTemplate)
+        self.skill_nav_steps = self.register_skill(SkillNavSteps)
         
         setup_args = {}
-        result = await self.skill_template.execute_setup(
+        result = await self.skill_nav_steps.execute_setup(
             setup_args=setup_args
         )
         self.log.warn(f'setup result: {result}')
 
-        execute_args = {
-            'error': self.error
+        test_type = {
+            'name': 'test_step',
+            'type': 'test_type'
         }
-        await self.skill_template.execute_main(
+
+        execute_args = {
+            'steps': [test_type]
+        }
+        await self.skill_nav_steps.execute_main(
             execute_args=execute_args,
             callback_done=self.cb_skill_done,
             callback_feedback=self.cb_skill_feedback,
@@ -30,10 +35,10 @@ class RayaApplication(RayaApplicationBase):
 
     async def loop(self):
         try:
-            result = await self.skill_template.wait_main()
+            result = await self.skill_nav_steps.wait_main()
             self.log.warn(f'skill_template result: {result}')
 
-            result = await self.skill_template.execute_finish()
+            result = await self.skill_nav_steps.execute_finish()
             self.log.warn(f'skill_template finish result: {result}')
 
         except RayaSkillAborted as e:
@@ -67,10 +72,4 @@ class RayaApplication(RayaApplicationBase):
 
 
     def get_arguments(self):
-        self.error = self.get_flag_argument(
-            '-e', '--error',
-            help=(
-                'It will generate an error inside '
-                'the skill in order to abort it.'
-            ),
-        )
+        pass

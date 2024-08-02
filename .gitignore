@@ -1,4 +1,4 @@
 /skills/*
 
-!/skills/skill_template/
+!/skills/NavSteps/
 !/skills/__init__.py
