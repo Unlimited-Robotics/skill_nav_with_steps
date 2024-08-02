@@ -1,7 +1,7 @@
 from typing import Union, List
 
 from raya.skills import RayaFSMSkill
-from raya.tools.fsm import RayaFSMAborted
+from raya.tools.fsm import RayaFSMAborted, FSM
 
 from raya.controllers.navigation_controller import NavigationController
 
@@ -35,6 +35,7 @@ class SkillNavSteps(RayaFSMSkill):
     STATES = [
         'SETUP_STEPS',
         'EXECUTE_STEPS',
+        'CLEANUP_STEPS',
         'END',
     ]
 
@@ -112,8 +113,7 @@ class SkillNavSteps(RayaFSMSkill):
                 self._steps.append(automatic_door)
             elif step_type == TEST_TYPE_NAME:
                 test = CommonType(
-                    name=step.get('name'),
-                    type=step.get('type')
+                    name=step.get('name')
                 )
                 self._steps.append(test)
             else:
@@ -141,6 +141,7 @@ class SkillNavSteps(RayaFSMSkill):
 
     async def transition_from_EXECUTE_STEPS(self):
         for step in self._steps:
+            self.log.warn(f'Running step \'{step.name}\'')
             try:
                 await step.fsm.run_and_await()
             except RayaFSMAborted as error:
@@ -150,5 +151,14 @@ class SkillNavSteps(RayaFSMSkill):
                     f'Error msg: \'{error.error_msg}\''
                 ))
                 self.abort(error)
+        self.set_state('CLEANUP_STEPS')
 
+
+    async def transition_from_CLEANUP_STEPS(self):
+        self.log.debug('Cleaning up...')
+        for step in self._steps:
+            FSM.registered_fsms.remove(step.name)
+            del step
+        
+        self._steps=[]
         self.set_state('END')

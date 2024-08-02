@@ -1,12 +1,11 @@
-from raya.logger import RaYaLogger
-
 from . import CommonTypeFSM
+from .constants import *
 
 class CommonType:
     
-    def __init__(self, name, type) -> None:
+    def __init__(self, name) -> None:
         self.name = name
-        self.type = type
+        self.type = TYPE_NAME
         self.fsm = CommonTypeFSM(
             self_object=self,
             name=self.name, 

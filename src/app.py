@@ -19,8 +19,9 @@ class RayaApplication(RayaApplicationBase):
             setup_args=setup_args
         )
         self.log.warn(f'setup result: {result}')
-        
-        
+
+
+    async def loop(self):
         execute_args = {
             'steps': EXAMPLE_STEPS
         }
@@ -30,15 +31,10 @@ class RayaApplication(RayaApplicationBase):
             callback_feedback=self.cb_skill_feedback,
             wait=False
         )
-
-
-    async def loop(self):
+        
         try:
             result = await self.skill_nav_steps.wait_main()
             self.log.warn(f'skill_template result: {result}')
-
-            result = await self.skill_nav_steps.execute_finish()
-            self.log.warn(f'skill_template finish result: {result}')
 
         except RayaSkillAborted as e:
             self.log.error((
@@ -47,13 +43,15 @@ class RayaApplication(RayaApplicationBase):
                 f'Error msg: \'{e.error_msg}\'.'
             ))
 
-        while True:
+        for _ in range(10):
             await self.sleep(1)
             self.log.debug(f'RayaApplication.loop')
 
 
     async def finish(self):
         self.log.info(f'RayaApplication.finish')
+        result = await self.skill_nav_steps.execute_finish()
+        self.log.warn(f'skill_template finish result: {result}')
 
 
     async def cb_skill_done(self, exception, result):
