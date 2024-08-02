@@ -13,7 +13,7 @@ class CommonActions(BaseActions):
         super().__init__()
         self.app = app
         self.helpers = helpers
-        self._log = self.helpers._log
+        self.log = self.helpers.get_logger()
     
     
     async def aborted(self, error, msg):

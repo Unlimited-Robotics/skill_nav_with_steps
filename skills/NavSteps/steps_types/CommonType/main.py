@@ -7,10 +7,8 @@ class CommonType:
     def __init__(self, name, type) -> None:
         self.name = name
         self.type = type
-        self._log = RaYaLogger(
-            name=name
-        )
         self.fsm = CommonTypeFSM(
+            self_object=self,
             name='CommonFSMType', 
             log_transitions=True,
         )
