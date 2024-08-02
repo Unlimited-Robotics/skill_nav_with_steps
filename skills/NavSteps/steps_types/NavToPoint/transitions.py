@@ -1,19 +1,31 @@
 import typing
-
-from raya.tools.fsm import BaseTransitions
-
 if typing.TYPE_CHECKING:
     from src.app import RayaApplication
 
+from ..CommonType import CommonTransitions
+
 from .errors import *
 from .constants import *
-from .helpers import CommonHelpers
+from .helpers import Helpers
 
 
-class CommonTransitions(BaseTransitions):
+class Transitions(CommonTransitions):
 
-    def __init__(self, app: 'RayaApplication', helpers: CommonHelpers):
-        super().__init__()
-        self.app = app
-        self.helpers = helpers
-        self._log = self.helpers._log
+    def __init__(self, app: 'RayaApplication', helpers: Helpers):
+        super().__init__(app=app, helpers=helpers)
+        self.helpers: Helpers = helpers
+
+
+    async def SETUP(self):
+        self.set_state('NAVIGATING_TO_POINT')
+
+
+    async def NAVIGATING_TO_POINT(self):
+        if not self.app.nav.is_navigating():
+            nav_error = self.app.nav.get_last_result()
+            if nav_error[0] == 0:
+                self.set_state('END')
+
+
+    async def END(self):
+        await super().END()

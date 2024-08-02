@@ -1,21 +1,26 @@
 import typing
-
-from raya.tools.fsm import BaseActions
-
 if typing.TYPE_CHECKING:
     from src.app import RayaApplication
 
-from .helpers import CommonHelpers
+from ..CommonType import CommonActions
+
+from .errors import *
+from .constants import *
+from .helpers import Helpers
 
 
-class CommonActions(BaseActions):
+class Actions(CommonActions):
 
-    def __init__(self, app: 'RayaApplication', helpers: CommonHelpers):
-        super().__init__()
-        self.app = app
-        self.helpers = helpers
-        self._log = self.helpers._log
+    def __init__(self, app: 'RayaApplication', helpers: Helpers):
+        super().__init__(app=app, helpers=helpers)
+        self.helpers: Helpers = helpers
 
 
-    async def aborted(self, error, msg):
-        pass
+    async def enter_NAVIGATING_TO_POINT(self):
+        await self.app.nav.navigate_to_position(
+            **self.helpers._fsm.step.point.to_dict(),
+            callback_feedback_async=self.helpers.nav_feedback_async,
+            callback_finish_async=self.helpers.nav_finish_async,
+            wait=False
+        )
+    

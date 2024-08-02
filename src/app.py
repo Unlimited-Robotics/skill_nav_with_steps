@@ -2,12 +2,15 @@ from raya.application_base import RayaApplicationBase
 from raya.exceptions import RayaSkillAborted
 
 from skills.NavSteps import SkillNavSteps
+from .constants import EXAMPLE_STEPS
 
+from raya.controllers.navigation_controller import NavigationController
 
 class RayaApplication(RayaApplicationBase):
 
     async def setup(self):
-        self.log.info(f'RayaApplication.setup')
+        self.nav:NavigationController = \
+            await self.enable_controller('navigation')
 
         self.skill_nav_steps = self.register_skill(SkillNavSteps)
         
@@ -16,14 +19,10 @@ class RayaApplication(RayaApplicationBase):
             setup_args=setup_args
         )
         self.log.warn(f'setup result: {result}')
-
-        test_type = {
-            'name': 'test_step',
-            'type': 'test_type'
-        }
-
+        
+        
         execute_args = {
-            'steps': [test_type]
+            'steps': EXAMPLE_STEPS
         }
         await self.skill_nav_steps.execute_main(
             execute_args=execute_args,

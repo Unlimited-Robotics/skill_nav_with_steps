@@ -1,7 +1,6 @@
 from typing import Union, List
 
 from raya.skills import RayaFSMSkill
-from raya.exceptions import RayaSkillAborted
 from raya.tools.fsm import RayaFSMAborted
 
 from raya.controllers.navigation_controller import NavigationController
@@ -54,8 +53,8 @@ class SkillNavSteps(RayaFSMSkill):
 
 
     async def setup(self):
-        # self.nav:NavigationController = \
-        #     await self.enable_controller('navigation')
+        self.nav:NavigationController = \
+            await self.enable_controller('navigation')
         self._steps: List[Union[NavToPoint, ManualDoor,AutomaticDoor]] = []
 
     
@@ -124,8 +123,8 @@ class SkillNavSteps(RayaFSMSkill):
                 ))
                 self.abort(*ERROR_STEP_NOT_VALID)
 
-            self.log.debug(f'Step \'{step_name}\' initalized succesfully')
-        self.log.debug('All steps initialized')
+            self.log.debug(f'Step \'{step_name}\' initialized successfully')
+        self.log.debug('All steps initialized successfully')
 
 
     async def enter_EXECUTE_STEPS(self):

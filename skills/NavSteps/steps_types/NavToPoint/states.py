@@ -1,20 +1,24 @@
 from .errors import *
+from ..CommonType import states as CommonStates
 
-
-# The first state is always the initial one
 STATES = [
-        'END',
+        *CommonStates.STATES,
+        'NAVIGATING_TO_POINT',
 ]
 
-# First state of FSM, if not defined, the FSM starts in the first element of
-# the STATES list
-INITIAL_STATE = ''
+INITIAL_STATE = 'SETUP'
 
 
-# If the FSM falls into one of these states, the execution finishes.
-END_STATES = []
+END_STATES = [
+        'END'
+]
 
 
-# If one of the states takes more than an especified time, it aborts.
 # Format: 'STATE': (<timeout>, <error_tuple>)
-STATES_TIMEOUTS = {}
+STATES_ABORT_TIMEOUTS = {
+        *CommonStates.STATES_ABORT_TIMEOUTS,
+}
+
+STATES_TRANSITION_TIMEOUTS = {
+        *CommonStates.STATES_TRANSITION_TIMEOUTS,
+}

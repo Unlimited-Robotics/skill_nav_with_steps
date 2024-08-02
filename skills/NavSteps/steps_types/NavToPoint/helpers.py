@@ -1,14 +1,30 @@
 import typing
-
-from raya.logger import RaYaLogger
-from raya.exceptions import *
-
 if typing.TYPE_CHECKING:
     from src.app import RayaApplication
+    from . import NavToPointFSM
+
+from raya.exceptions import *
+
+from ..CommonType import CommonHelpers
+
+from .errors import *
+from .constants import *
 
 
-class CommonHelpers:
+class Helpers(CommonHelpers):
 
-    def __init__(self, app: 'RayaApplication', name='common_fsm'):        
-        self.app = app
-        self._log = RaYaLogger(name)
+    def __init__(self, app: 'RayaApplication'):
+        super().__init__(app=app)
+        self._fsm: NavToPointFSM = None
+
+
+    async def nav_feedback_async(self, code, msg, distance, speed):
+        self.log.debug(
+            'nav_feedback_async: '
+            f'{code}, {msg}, {distance}, {speed}'
+        )
+        
+    async def nav_finish_async(self, code, msg):
+        self.log.debug(
+            f'nav_finish_async: {code}, {msg}'
+        )
