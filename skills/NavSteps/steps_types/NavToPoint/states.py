@@ -6,6 +6,7 @@ STATES = [
         *CommonStates.STATES,
         *RetryStates.STATES,
         'NAVIGATING_TO_POINT',
+        'NAVIGATING_TO_POINT_FAILED'
 ]
 
 INITIAL_STATE = 'SETUP'

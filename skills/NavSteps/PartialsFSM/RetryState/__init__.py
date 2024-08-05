@@ -1,7 +1,7 @@
 from ..CommonFSM import CommonFSM
 from raya.logger import RaYaLogger
 
-# from .constants import *
+from .constants import *
 
 from .transitions import Transitions
 from .helpers import Helpers

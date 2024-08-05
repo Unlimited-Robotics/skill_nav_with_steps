@@ -4,6 +4,7 @@ if typing.TYPE_CHECKING:
 
 from ..CommonFSM import CommonActions
 from .helpers import Helpers
+from .constants import *
 
 
 class Actions(CommonActions):
@@ -18,15 +19,21 @@ class Actions(CommonActions):
 
 
     async def enter_WAIT_FOR_HELP(self):  
-        pass
+        await self.app.ui.display_choice_selector(
+            **UI_SCREEN_WAIT_FOR_HELP_SELECTOR,
+            wait=False,
+            async_callback=self.helpers.display_choice_selector_callback
+        )
+        self.helpers.start_timer_teleoperator()
+
+
+    async def leave_WAIT_FOR_HELP(self):
+        self.helpers._ui_response_wait_for_help = None
+        await self.helpers.custom_turn_off_leds()
 
 
     async def WAIT_FOR_HELP_to_CONTINUE(self):
         self.helpers.reset_retry_counter()
-
-
-    async def leave_WAIT_FOR_HELP(self):
-        await self.helpers.custom_turn_off_leds()
 
 
     async def enter_ABORT(self):

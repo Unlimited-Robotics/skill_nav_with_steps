@@ -23,10 +23,15 @@ class Transitions(CommonTransitions):
 
 
     async def WAIT_FOR_HELP(self):
-        response = await self.app.ui.display_choice_selector(
-            **UI_SCREEN_WAIT_FOR_HELP_SELECTOR,
-            wait=True
-        )
+        if self.helpers.check_teleoperator_timeout():
+            # TODO: Add a new state to handle the timeout
+            self.log.warn('Timeout reached for teleoperator')
+            self.abort(*ERR_TELEOPERATOR_TIMEOUT)
+        
+        if self.helpers._ui_response_wait_for_help is None:
+            return
+        
+        response = self.helpers._ui_response_wait_for_help
         self.log.warn(f'User selected: {response}')
         if 'selected_option' not in response:
             return

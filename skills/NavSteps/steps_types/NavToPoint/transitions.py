@@ -22,16 +22,21 @@ class Transitions(RetryTransitions):
 
 
     async def NAVIGATING_TO_POINT(self):
-        if not self.app.nav.is_navigating():
-            nav_error = self.app.nav.get_last_result()
-            if nav_error[0] == 0:
-                self.set_state('END')
-            else:
-                self.helpers.retry_step(
-                    last_state='NAVIGATING_TO_POINT',
-                    transitions=self
-                )
+        if self.app.nav.is_navigating():
+            return
+        
+        nav_error = self.app.nav.get_last_result()
+        if nav_error[0] == 0:
+            self.set_state('END')
+        else:
+            self.set_state('NAVIGATING_TO_POINT_FAILED')
 
 
-    async def END(self):
-        await super().END()
+    async def NAVIGATING_TO_POINT_FAILED(self):
+        if self.helpers._fsm.step.teleoperator_if_fail:
+            self.helpers.retry_step(
+                last_state='NAVIGATING_TO_POINT',
+                timeout=self.helpers._fsm.step.teleoperator_timeout,
+                transitions=self,
+            )
+        self.set_state('NAVIGATING_TO_POINT')
