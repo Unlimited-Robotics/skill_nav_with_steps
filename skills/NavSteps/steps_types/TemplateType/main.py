@@ -1,9 +1,8 @@
-from ..CommonType.main import CommonType
 from . import TemplateFSM
 
 from .constants import *
 
-class Template(CommonType):
+class Template:
 
     def __init__(self,
             name: str,
@@ -12,6 +11,6 @@ class Template(CommonType):
         self.type = TYPE_NAME
         self.fsm = TemplateFSM(
             self_object=self,
-            name='TemplateFSM', 
+            name=self.name, 
             log_transitions=True,
         )

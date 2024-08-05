@@ -3,8 +3,6 @@ if typing.TYPE_CHECKING:
     from src.app import RayaApplication
     from . import NavToPointFSM
 
-from raya.exceptions import *
-
 from ..CommonType import CommonHelpers
 
 from .errors import *
