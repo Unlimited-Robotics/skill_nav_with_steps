@@ -16,6 +16,8 @@ class Helpers(RetryHelpers):
         RetryHelpers.__init__(self=self, app=app)
         self._fsm: NavToPointFSM = None
         
+        self.__navigating_leds_on = False
+        
         self.__obstacle_tries = 0
         self.__navigating_tries = 0
 
@@ -28,7 +30,6 @@ class Helpers(RetryHelpers):
         
         if code == 30:
             # navigating
-            self.__navigating_tries += 1
             if self.__navigating_tries >= NAVIGATION_TRY_LIMIT and \
                     self.__obstacle_tries != 0:
                 self.log.warn(
@@ -38,11 +39,23 @@ class Helpers(RetryHelpers):
                 self.__obstacle_tries = 0
                 await self.custom_turn_off_leds()
                 await self.custom_cancel_sound()
+            
+            if self.__navigating_leds_on is False:
+                # TODO: play last correct ui
+                await self.custom_animation(
+                    **LEDS_NAVIGATING,
+                    wait=False
+                )
+                self.__navigating_leds_on = True
+            
+            self.__navigating_tries += 1
 
         elif code == 167:
             # obstacle detected
             self.__obstacle_tries += 1
             self.__navigating_tries = 0
+            
+            self.__navigating_leds_on = False
             # await self.app.ui.show_animation(**UI_SCREEN_OBSTACLE_DETECTED)
 
         elif code == 9:
@@ -65,11 +78,13 @@ class Helpers(RetryHelpers):
                     animation_head_leds=LEDS_NOTIFY_OBSTACLE
                 )
         
-        if not self.app.sound.is_playing():
-            await self.custom_turn_off_leds()
+            if not self.app.sound.is_playing():
+                await self.custom_turn_off_leds()
 
 
     async def nav_finish_async(self, code, msg):
         self.log.debug(
             f'nav_finish_async: {code}, {msg}'
         )
+        await self.custom_cancel_sound()
+        await self.custom_turn_off_leds()

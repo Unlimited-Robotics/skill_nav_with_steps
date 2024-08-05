@@ -24,4 +24,11 @@ class Actions(RetryActions):
             callback_finish_async=self.helpers.nav_finish_async,
             wait=False
         )
+        await self.app.ui.show_animation(
+            **self.helpers._fsm.step.custom_ui_screen
+        )
+
     
+    async def leave_NAVIGATING_TO_POINT(self):
+        await self.helpers.custom_turn_off_leds()
+        await self.helpers.custom_cancel_sound()
