@@ -4,7 +4,7 @@ if typing.TYPE_CHECKING:
     from . import CommonFSM
 
 from raya.logger import RaYaLogger
-from raya.exceptions import RayaCommandAlreadyRunning
+from raya.exceptions import RayaCommandAlreadyRunning, RayaFileDoesNotExist
 
 from .constants import DELAY_BEETWEEN_SOUND_LOOP, LEDS_GARY_SPEAKING
 
@@ -80,7 +80,6 @@ class CommonHelpers():
                     wait=False,
                     callback_finish=self.sound_finish_callback
                 )
-            else:
                 await self.custom_animation(
                     **animation_head_leds, 
                     wait=False
@@ -93,5 +92,9 @@ class CommonHelpers():
                 while self.app.sound.is_playing():
                     await self.app.sleep(0.5)
                 await self.custom_turn_off_leds(group='head')
+        except RayaFileDoesNotExist:
+            self.log.error(
+                f'Audio file \'{audio}\' not found'
+            )
         except RayaCommandAlreadyRunning:
             pass

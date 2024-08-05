@@ -26,3 +26,11 @@ class Point:
             'pos_unit': self.pos_unit,
             **self.nav_options
         }
+
+
+    def get_only_coordinates(self) -> dict:
+        return {
+            'x': self.x,
+            'y': self.y,
+            'ang_unit': self.ang_unit,
+        }

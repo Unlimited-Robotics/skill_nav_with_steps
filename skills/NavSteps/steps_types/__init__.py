@@ -1,5 +1,5 @@
 from .CommonType.main import CommonType
 from .NavToPoint.main import NavToPoint
+from .AutomaticDoor.main import AutomaticDoor
 
-from .AutomaticDoor import AutomaticDoor
-from .ManualDoor import ManualDoor
+from .ManualDoor.main import ManualDoor

@@ -1,12 +1,7 @@
-import typing
-if typing.TYPE_CHECKING:
-    from src.app import RayaApplication
-
 from ..Point import Point
 from . import NavToPointFSM
 
 from .constants import *
-from .helpers import Helpers
 
 class NavToPoint:
 
