@@ -1,10 +1,12 @@
 import typing
-import logging
 if typing.TYPE_CHECKING:
     from src.app import RayaApplication
     from . import CommonFSM
 
 from raya.logger import RaYaLogger
+from raya.exceptions import RayaCommandAlreadyRunning
+
+from .constants import DELAY_BEETWEEN_SOUND_LOOP, LEDS_GARY_SPEAKING
 
 
 class CommonHelpers():
@@ -58,3 +60,38 @@ class CommonHelpers():
                 await self.app.leds.turn_off_all()
             except Exception:
                 pass
+
+
+    def sound_finish_callback(self, code, msg):
+        pass
+
+    
+    async def gary_play_audio(self, 
+            audio: dict, 
+            animation_head_leds: dict = LEDS_GARY_SPEAKING,
+            wait: bool = False
+        ):
+        try:
+            if not self.app.sound.is_playing():
+                await self.custom_turn_off_leds(group='head')
+                await self.app.sleep(DELAY_BEETWEEN_SOUND_LOOP)
+                await self.app.sound.play_sound(
+                    **audio,
+                    wait=False,
+                    callback_finish=self.sound_finish_callback
+                )
+            else:
+                await self.custom_animation(
+                    **animation_head_leds, 
+                    wait=False
+                )
+            if wait:
+                await self.custom_animation(
+                    **animation_head_leds, 
+                    wait=False
+                )
+                while self.app.sound.is_playing():
+                    await self.app.sleep(0.5)
+                await self.custom_turn_off_leds(group='head')
+        except RayaCommandAlreadyRunning:
+            pass

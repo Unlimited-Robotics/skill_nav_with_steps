@@ -20,8 +20,8 @@ class Actions(RetryActions):
     async def enter_NAVIGATING_TO_POINT(self):
         await self.app.nav.navigate_to_position(
             **self.helpers._fsm.step.point.to_dict(),
-            callback_feedback_async=self.helpers._fsm.step.nav_feedback_async,
-            callback_finish_async=self.helpers._fsm.step.nav_finish_async,
+            callback_feedback_async=self.helpers.nav_feedback_async,
+            callback_finish_async=self.helpers.nav_finish_async,
             wait=False
         )
     

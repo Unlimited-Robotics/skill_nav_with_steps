@@ -1,7 +1,12 @@
+import typing
+if typing.TYPE_CHECKING:
+    from src.app import RayaApplication
+
 from ..Point import Point
 from . import NavToPointFSM
 
 from .constants import *
+from .helpers import Helpers
 
 class NavToPoint:
 
@@ -20,17 +25,4 @@ class NavToPoint:
             self_object=self,
             name=self.name, 
             log_transitions=True,
-        )
-
-
-    async def nav_feedback_async(self, code, msg, distance, speed):
-        self.fsm.log.debug(
-            'nav_feedback_async: '
-            f'{code}, {msg}, {distance}, {speed}'
-        )
-
-
-    async def nav_finish_async(self, code, msg):
-        self.fsm.log.debug(
-            f'nav_finish_async: {code}, {msg}'
         )
