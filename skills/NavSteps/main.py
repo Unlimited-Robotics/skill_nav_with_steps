@@ -150,7 +150,7 @@ class SkillNavSteps(RayaFSMSkill):
                     f'Error code: \'{error.error_code}\' '
                     f'Error msg: \'{error.error_msg}\''
                 ))
-                self.abort(error)
+                self.abort(error.error_code, error.error_msg)
         self.set_state('CLEANUP_STEPS')
 
 

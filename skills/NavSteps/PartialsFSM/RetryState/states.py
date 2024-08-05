@@ -4,3 +4,5 @@ STATES = [
     'CONTINUE',
     'ABORT',
 ]
+
+INITIAL_STATE = 'REQUEST_FOR_HELP'

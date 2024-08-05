@@ -4,13 +4,13 @@ if typing.TYPE_CHECKING:
 
 from ..CommonFSM import CommonTransitions
 
-from . import Helpers
+from .helpers import Helpers
 from .constants import *
 
 
 class Transitions(CommonTransitions):
 
-    def __init__(self, app: RayaApplication, helpers: Helpers):
+    def __init__(self, app: 'RayaApplication', helpers: Helpers):
         super().__init__(app=app, helpers=helpers)
         self.helpers: Helpers
     

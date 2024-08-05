@@ -3,12 +3,12 @@ if typing.TYPE_CHECKING:
     from src.app import RayaApplication
 
 from ..CommonFSM import CommonActions
-from . import Helpers
+from .helpers import Helpers
 
 
 class Actions(CommonActions):
     
-    def __init__(self, app: RayaApplication, helpers: Helpers):
+    def __init__(self, app: 'RayaApplication', helpers: Helpers):
         super().__init__(app=app, helpers=helpers)
         self.helpers: Helpers
 

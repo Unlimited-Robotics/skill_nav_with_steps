@@ -1,8 +1,10 @@
 from .errors import *
 from ..CommonType import states as CommonStates
+from ...PartialsFSM.RetryState import states as RetryStates
 
 STATES = [
         *CommonStates.STATES,
+        *RetryStates.STATES,
         'NAVIGATING_TO_POINT',
 ]
 

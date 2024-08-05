@@ -1,3 +1,5 @@
+import inspect
+
 from typing import NoReturn, TYPE_CHECKING
 if TYPE_CHECKING:
     from src.app import RayaApplication
@@ -5,14 +7,16 @@ if TYPE_CHECKING:
 
 from ..CommonFSM import CommonHelpers
 from .constants import *
+from .states import *
 
 class Helpers(CommonHelpers):
     
-    def __init__(self, app: RayaApplication):
+    def __init__(self, app: 'RayaApplication'):
         super().__init__(app=app)
         
         self._last_failed_state = ''
         self._last_failed_state_counter = 1
+        self.max_tries = MAX_RETRY_COUNTER_REQUEST_FOR_HELP
 
 
     def reset_retry_counter(self):
@@ -20,12 +24,17 @@ class Helpers(CommonHelpers):
 
 
     def max_retry_reached(self):
-        counter = self._last_failed_state_counter > \
-            MAX_RETRY_COUNTER_REQUEST_FOR_HELP
-        self.log.debug((
-            f'current try: {self._last_failed_state_counter} '
-            f'of {MAX_RETRY_COUNTER_REQUEST_FOR_HELP}'
-        ))
+        counter = self._last_failed_state_counter > self.max_tries
+        if counter:
+            self.log.error((
+                f'Maximum tries reached for state: '
+                f'{self._last_failed_state}'
+            ))
+        else:
+            self.log.debug((
+                f'current try: {self._last_failed_state_counter} '
+                f'of {self.max_tries}'
+            ))
         return counter
 
 
@@ -43,11 +52,12 @@ class Helpers(CommonHelpers):
         return self._last_failed_state
 
 
-    def set_state_wrapper(self,
-            new_state:str,
-            transitions: Transitions, 
-            last_state:str = ''
+    def retry_step(self,
+            transitions,
+            last_state:str = '',
+            max_tries: int = MAX_RETRY_COUNTER_REQUEST_FOR_HELP
         ) -> NoReturn:
+        self.max_tries = max_tries
         if last_state != '':
             self.__set_last_failed_state(last_state)
-        transitions.set_state(new_state)
+        transitions.set_state(INITIAL_STATE)

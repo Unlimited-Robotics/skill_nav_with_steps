@@ -2,17 +2,18 @@ import typing
 if typing.TYPE_CHECKING:
     from src.app import RayaApplication
 
-from ..CommonType import CommonActions
+# from ..CommonType import CommonActions
+from ...PartialsFSM.RetryState import Actions as RetryActions
 
 from .errors import *
 from .constants import *
 from .helpers import Helpers
 
 
-class Actions(CommonActions):
+class Actions(RetryActions):
 
     def __init__(self, app: 'RayaApplication', helpers: Helpers):
-        super().__init__(app=app, helpers=helpers)
+        RetryActions.__init__(self=self, app=app, helpers=helpers)
         self.helpers: Helpers
 
 
