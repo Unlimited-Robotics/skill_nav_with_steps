@@ -13,7 +13,7 @@ class Actions(CommonActions):
 
     def __init__(self, app: 'RayaApplication', helpers: Helpers):
         super().__init__(app=app, helpers=helpers)
-        self.helpers: Helpers = helpers
+        self.helpers: Helpers
 
 
     async def enter_NAVIGATING_TO_POINT(self):

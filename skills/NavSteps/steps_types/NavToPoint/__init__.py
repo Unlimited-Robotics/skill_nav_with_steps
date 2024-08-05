@@ -13,6 +13,7 @@ from .constants import *
 from .errors import *
 
 class NavToPointFSM(CommonTypeFSM):
+    
     def __init__(self, *args, **kwarg):
         super().__init__(*args, **kwarg)
         self.step: NavToPoint = self.step
