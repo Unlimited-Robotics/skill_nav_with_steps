@@ -27,16 +27,16 @@ class Actions(CommonActions):
 
 
     async def enter_NAVIGATE_THROUGH_DOOR(self):
-        if self.app.nav.is_navigating():
-            await self.app.nav.update_current_nav_goal(
-                **self.helpers._fsm.step.after_door_point.get_only_coordinates(),
-            )
-        else:
-            await self.app.nav.navigate_to_position(
-                **self.helpers._fsm.step.after_door_point.to_dict(),
-                callback_feedback_async=self.helpers.nav_feedback_async,
-                callback_finish_async=self.helpers.nav_finish_async,
-            )
+        # if self.app.nav.is_navigating():
+        #     await self.app.nav.update_current_nav_goal(
+        #         **self.helpers._fsm.step.after_door_point.get_only_coordinates(),
+        #     )
+        # else:
+        await self.app.nav.navigate_to_position(
+            **self.helpers._fsm.step.after_door_point.to_dict(),
+            callback_feedback_async=self.helpers.nav_feedback_async,
+            callback_finish_async=self.helpers.nav_finish_async,
+        )
 
     
     async def leave_NAVIGATE_THROUGH_DOOR(self):
