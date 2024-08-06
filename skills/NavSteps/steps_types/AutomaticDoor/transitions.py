@@ -19,7 +19,7 @@ class Transitions(CommonTransitions):
 
     async def SETUP(self):
         if await self.helpers.detector_ready():
-            self.set_state('NAVIGATE_THROUGH_DOOR')
+            self.set_state('WAIT_FOR_DOOR_OPEN')
         else:
             self.log.debug('Detector not ready, waiting...')
 
@@ -62,7 +62,7 @@ class Transitions(CommonTransitions):
             # 116 nav could compute a path
             if nav_error[0] == 0:
                 self.set_state('END')
-            elif nav_error[0] == 18 or nav_error[0] == 116:
+            elif nav_error[0] == 116 and await self.helpers.tag_door_visible():
                 self.set_state('WAIT_FOR_DOOR_OPEN')
             else:
                 self.log.error(f'Navigation error: \'{nav_error}\'')
