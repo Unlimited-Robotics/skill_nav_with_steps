@@ -15,9 +15,9 @@ class ManualDoor(AutomaticDoor):
             tags_ids: list,
             tags_sizes: list,
             tags_family: str = '36h11',
-            phone_call_timeout: float = 60.0,
-            call_user_id: str = None,
-            timeout: float = 60.0
+            phone_call_timeout: float = -1.0,
+            phone_call_user_id: str = None,
+            timeout: float = -1.0
         ) -> None:
         super.__init__(
             name=name,
@@ -34,4 +34,4 @@ class ManualDoor(AutomaticDoor):
         )
         
         self.phone_call_timeout = phone_call_timeout
-        self.call_user_id = call_user_id
+        self.phone_call_user_id = phone_call_user_id

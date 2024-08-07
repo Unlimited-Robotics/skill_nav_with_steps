@@ -21,6 +21,10 @@ class Actions(CommonActions):
         await self.helpers._enable_door_detection()
 
 
+    async def enter_WAIT_FOR_DOOR_OPEN(self):
+        pass
+
+
     async def leave_WAIT_FOR_DOOR_OPEN(self):
         await self.helpers.custom_cancel_sound()
         await self.helpers.custom_turn_off_leds()
