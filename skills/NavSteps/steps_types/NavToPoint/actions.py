@@ -5,6 +5,8 @@ if typing.TYPE_CHECKING:
 # from ..CommonType import CommonActions
 from ...PartialsFSM.RetryState import Actions as RetryActions
 
+from raya.exceptions import RayaNavNotNavigating
+
 from .errors import *
 from .constants import *
 from .helpers import Helpers
@@ -22,12 +24,22 @@ class Actions(RetryActions):
             point = self.helpers._fsm.step.point.get_only_coordinates()
             self.log.warn('Already navigating')
             self.log.warn(f'Updating current nav goal to: {point}')
-            await self.app.nav.update_current_nav_goal(
-                **point,
-                callback_feedback_async=self.helpers.nav_feedback_async,
-                callback_finish_async=self.helpers.nav_finish_async,
-                wait=False
-            )
+            try:
+                await self.app.nav.update_current_nav_goal(
+                    **point,
+                    callback_feedback_async=self.helpers.nav_feedback_async,
+                    callback_finish_async=self.helpers.nav_finish_async,
+                    wait=False
+                )
+            except RayaNavNotNavigating:
+                point = self.helpers._fsm.step.point.to_dict()
+                self.log.debug(f'Navigating to point: {point}')
+                await self.app.nav.navigate_to_position(
+                    **point,
+                    callback_feedback_async=self.helpers.nav_feedback_async,
+                    callback_finish_async=self.helpers.nav_finish_async,
+                    wait=False
+                )
         else:
             point = self.helpers._fsm.step.point.to_dict()
             self.log.debug(f'Navigating to point: {point}')
