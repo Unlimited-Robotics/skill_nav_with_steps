@@ -56,6 +56,13 @@ class Transitions(CommonTransitions):
 
     
     async def NAVIGATE_THROUGH_DOOR(self):
+        if await self.app.nav.is_in_zone(
+                zone_name=self.helpers._fsm.step.zone_name
+            ) != self.helpers.is_inside_initial_zone:
+            # if robot leaves or enters the zone, the skill ends
+            self.log.debug('Robot left/enter the zone, ending skill...')
+            self.set_state('END')
+        
         if not self.app.nav.is_navigating():
             nav_error = self.app.nav.get_last_result()
             # 18 nav was canceled 

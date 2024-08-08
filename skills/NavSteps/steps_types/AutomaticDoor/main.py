@@ -8,6 +8,7 @@ class AutomaticDoor:
     
     def __init__(self,
             name: str,
+            zone_name: str,
             after_door_point: dict,
             tags_ids: list,
             tags_sizes: list,
@@ -15,6 +16,7 @@ class AutomaticDoor:
             timeout: float = 60.0
         ) -> None:
         self.name = name
+        self.zone_name = zone_name
         self.after_door_point: Point = Point(**after_door_point)
         self.tags_ids = tags_ids
         self.tags_family = tags_family

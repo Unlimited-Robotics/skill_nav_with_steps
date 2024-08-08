@@ -17,6 +17,9 @@ class Actions(CommonActions):
     
 
     async def enter_SETUP(self):
+        self.helpers.is_inside_initial_zone = await self.app.nav.is_in_zone(
+                zone_name=self.helpers._fsm.step.zone_name
+            )
         await self.helpers.enable_cameras()
         await self.helpers._enable_door_detection()
 

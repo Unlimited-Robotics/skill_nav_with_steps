@@ -25,6 +25,7 @@ class Helpers(CommonHelpers):
         self._tags = dict()
         self.task_timer_name = 'timer_tag_door'
         self.detector_is_ready = False
+        self.is_inside_initial_zone = False
 
 
     async def enable_cameras(self):

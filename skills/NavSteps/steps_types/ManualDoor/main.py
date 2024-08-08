@@ -11,6 +11,7 @@ class ManualDoor(AutomaticDoor):
     
     def __init__(self,
             name: str,
+            zone_name : str,
             after_door_point: dict,
             tags_ids: list,
             tags_sizes: list,
@@ -21,6 +22,7 @@ class ManualDoor(AutomaticDoor):
         ) -> None:
         super.__init__(
             name=name,
+            zone_name=zone_name,
             after_door_point=after_door_point,
             tags_ids=tags_ids,
             tags_family=tags_family,
