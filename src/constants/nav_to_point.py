@@ -10,7 +10,7 @@ TEST_POINT = {
 
 TEST_POINT_OPTIONS = {
     'options': {
-        'behavior_tree': 'compute_path'
+        'behavior_tree': 'navigate_and_replan_if_needed'
     },
 }
 
@@ -24,5 +24,39 @@ NAV_TO_POINT_EXAMPLE = {
         **TEST_POINT_OPTIONS
     },
     'teleoperator_if_fail': True,
-    'teleoperator_timeout': 60.0
+    # 'teleoperator_timeout': 10.0,
+    # 'custom_ui_screen' : {},
+}
+
+NAV_TO_POINT_EXIT_WAREHOUSE = {
+    'name': 'navigation to exit',
+    'type': 'nav_to_point',
+    'point' : {
+        'x':        1761.0,
+        'y':        904.0,
+        'angle':    0.22435328773765226,
+        'pos_unit': POSITION_UNIT.PIXELS,
+        'ang_unit': ANGLE_UNIT.RADIANS,
+        **TEST_POINT_OPTIONS
+    },
+    'teleoperator_if_fail': True,
+    # 'teleoperator_timeout': 10.0,
+    # 'custom_ui_screen' : {},
+}
+
+NAV_TO_POINT_ELEVATORS = {
+    'name': 'navigation to elevators',
+    'type': 'nav_to_point',
+    
+    'point' : {
+        'x': 2833.0,
+        'y': 706.0,
+        'angle': 0.2177464694155388,
+        'pos_unit': POSITION_UNIT.PIXELS,
+        'ang_unit': ANGLE_UNIT.RADIANS,
+        **TEST_POINT_OPTIONS
+    },
+    'teleoperator_if_fail': True,
+    # 'teleoperator_timeout': 10.0,
+    # 'custom_ui_screen' : {},
 }

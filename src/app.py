@@ -5,12 +5,41 @@ from skills.NavSteps import SkillNavSteps
 from .constants import EXAMPLE_STEPS
 
 from raya.controllers.navigation_controller import NavigationController
+from raya.controllers.leds_controller import LedsController
+from raya.controllers.sound_controller import SoundController
+from raya.controllers.ui_controller import UIController
+from raya.controllers.fleet_controller import FleetController
+from raya.controllers.sensors_controller import SensorsController
+from raya.controllers.motion_controller import MotionController
+from raya.controllers.cameras_controller import CamerasController
+from raya.controllers.cv_controller import CVController
+from raya.controllers.robot_skills_controller import RobotSkillsController
 
 class RayaApplication(RayaApplicationBase):
 
     async def setup(self):
         self.nav:NavigationController = \
             await self.enable_controller('navigation')
+        self.nav:NavigationController = \
+                await self.enable_controller('navigation')
+        self.leds:LedsController  = \
+                await self.enable_controller('leds')
+        self.sound:SoundController = \
+                await self.enable_controller('sound')
+        self.ui:UIController = \
+                await self.enable_controller('ui')
+        self.fleet:FleetController = \
+                await self.enable_controller('fleet')
+        self.sensors:SensorsController = \
+                await self.enable_controller('sensors')
+        self.motion:MotionController = \
+                await self.enable_controller('motion')
+        self.cameras: CamerasController = \
+                await self.enable_controller('cameras')
+        self.cv: CVController = \
+                await self.enable_controller('cv')
+        self.robot_skills: RobotSkillsController = \
+                await self.enable_controller('robot_skills')
 
         self.skill_nav_steps = self.register_skill(SkillNavSteps)
         
@@ -57,7 +86,6 @@ class RayaApplication(RayaApplicationBase):
     async def cb_skill_done(self, exception, result):
         self.log.debug(
             f'Callback skill done: '
-            f'Exception: \'{exception}\', '
             f'Result: \'{result}\'.'
         )
 

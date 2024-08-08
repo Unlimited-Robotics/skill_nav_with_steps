@@ -57,17 +57,49 @@ nav_params_elevator_waiting_point_to_elevators = {
 SUPER_DICT = {
     'floor7':{
         'elev_to_7W':[
-
+            {
+                'name': 'nav_to_door_1',
+                'type': 'nav_to_point',
+                'point': {'x':0.0, 'y':0.0, 'angle':0.0, 'units':0.0, 'nav_options': XXX},
+                'teleoperator_if_fail': True,
+                'teleoperator_timeout': 60,
+                'navigating_ui': XXX,
+                'obstacle_ui': XXX,
+            },
+            {
+                'name': 'waiting_door_1',
+                'type': 'manual_door',
+                'after_door_point': {'x':0.0, 'y':0.0, 'angle':0.0, 'units':0.0, 'nav_options': XXX},
+                'tags_ids': [24, 56],
+                'tags_family': '16h11',
+                'tags_sizes': [0.08, 0.06],
+                'call_timeout': 20.0,
+                'call_user_id': XXX,
+                'timeout': -1.0,
+            },
+            {
+                'name': 'nav_to_unit_7W',
+                'type': 'nav_to_point',
+                'point': {'x':0.0, 'y':0.0, 'angle':0.0, 'units':0.0, 'nav_options': XXX},
+                'teleoperator_if_fail': True,
+                'teleoperator_timeout': 60,
+            },
         ],
         'elev_to_7E':[
-
+            {
+                'name': 'nav_to_unit_7E',
+                'type': 'nav_to_point',
+                'point': {'x':0.0, 'y':0.0, 'angle':0.0, 'units':0.0, 'nav_options': XXX},
+                'teleoperator_if_fail': True,
+                'teleoperator_timeout': 60,
+            },
         ],
         '7W_to_7E':[
 
         ],
-        # '7E_to_7W':[
+        '7E_to_7W':[
 
-        # ],
+        ],
         '7W_to_elev':[
 
         ],
@@ -126,8 +158,8 @@ manual_door = {
     'tags_ids': [24, 56],
     'tags_family': '16h11',
     'tags_sizes': [0.08, 0.06],
-    'call_timeout': 20.0,
-    'call_user_id': XXX,
+    'phone_call_timeout': 20.0,
+    'phone_call_user_id': XXX,
     'timeout': -1.0,
 }
 

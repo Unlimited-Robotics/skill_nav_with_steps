@@ -18,14 +18,25 @@ class Actions(RetryActions):
 
 
     async def enter_NAVIGATING_TO_POINT(self):
-        point = self.helpers._fsm.step.point.to_dict()
-        self.log.debug(f'Navigating to point: {point}')
-        await self.app.nav.navigate_to_position(
-            **point,
-            callback_feedback_async=self.helpers.nav_feedback_async,
-            callback_finish_async=self.helpers.nav_finish_async,
-            wait=False
-        )
+        if self.app.nav.is_navigating():
+            point = self.helpers._fsm.step.point.get_only_coordinates()
+            self.log.warn('Already navigating')
+            self.log.warn(f'Updating current nav goal to: {point}')
+            await self.app.nav.update_current_nav_goal(
+                **point,
+                callback_feedback_async=self.helpers.nav_feedback_async,
+                callback_finish_async=self.helpers.nav_finish_async,
+                wait=False
+            )
+        else:
+            point = self.helpers._fsm.step.point.to_dict()
+            self.log.debug(f'Navigating to point: {point}')
+            await self.app.nav.navigate_to_position(
+                **point,
+                callback_feedback_async=self.helpers.nav_feedback_async,
+                callback_finish_async=self.helpers.nav_finish_async,
+                wait=False
+            )
         await self.app.ui.show_animation(
             **self.helpers._fsm.step.custom_ui_screen
         )

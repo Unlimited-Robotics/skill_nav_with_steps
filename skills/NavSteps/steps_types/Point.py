@@ -32,5 +32,7 @@ class Point:
         return {
             'x': self.x,
             'y': self.y,
+            'angle': self.angle,
             'ang_unit': self.ang_unit,
+            'pos_unit': self.pos_unit,
         }
