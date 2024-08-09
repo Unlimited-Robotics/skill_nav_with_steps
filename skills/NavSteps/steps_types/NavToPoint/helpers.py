@@ -28,7 +28,7 @@ class Helpers(RetryHelpers):
             f'{code}, {msg}, {distance}, {speed}'
         )
         
-        if code == 30:
+        if code == 6:
             # navigating
             if self.__navigating_tries >= NAVIGATION_TRY_LIMIT and \
                     self.__obstacle_tries != 0:
@@ -50,7 +50,7 @@ class Helpers(RetryHelpers):
             
             self.__navigating_tries += 1
 
-        elif code == 167:
+        elif code == 7:
             # obstacle detected
             self.__obstacle_tries += 1
             self.__navigating_tries = 0
