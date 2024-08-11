@@ -41,7 +41,7 @@ class Transitions(CommonTransitions):
                     animation_head_leds=LEDS_DOOR_OPENED,
                 )
                 self._door_was_close = False
-                self.app.sleep(DELAY_AFTER_DOOR_OPENED)
+                await self.app.sleep(DELAY_AFTER_DOOR_OPENED)
                 # TODO: set last correct ui screen
             self.set_state('NAVIGATE_THROUGH_DOOR')
         else:
