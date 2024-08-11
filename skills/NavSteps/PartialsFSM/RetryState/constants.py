@@ -1,6 +1,6 @@
 from .errors import *
 
-MAX_RETRY_COUNTER_REQUEST_FOR_HELP = 3
+MAX_RETRY_COUNTER_REQUEST_FOR_HELP = 1
 ERR_APP_ABORTED = (1, 'FSM aborted by user')
 
 from raya.enumerations import UI_THEME_TYPE
