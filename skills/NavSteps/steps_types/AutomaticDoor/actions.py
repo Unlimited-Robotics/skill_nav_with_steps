@@ -2,6 +2,8 @@ import typing
 if typing.TYPE_CHECKING:
     from src.app import RayaApplication
 
+from raya.exceptions import RayaNavAlreadyNavigating
+
 from ..CommonType import CommonActions
 
 from .errors import *
@@ -41,11 +43,14 @@ class Actions(CommonActions):
         # else:
         point = self.helpers._fsm.step.after_door_point.to_dict()
         self.log.debug(f'Navigating to point: {point}')
-        await self.app.nav.navigate_to_position(
-            **point,
-            callback_feedback_async=self.helpers.nav_feedback_async,
-            callback_finish_async=self.helpers.nav_finish_async,
-        )
+        try:
+            await self.app.nav.navigate_to_position(
+                **point,
+                callback_feedback_async=self.helpers.nav_feedback_async,
+                callback_finish_async=self.helpers.nav_finish_async,
+            )
+        except RayaNavAlreadyNavigating:
+            self.log.error('RayaNavAlreadyNavigating')
 
     
     async def leave_NAVIGATE_THROUGH_DOOR(self):
