@@ -4,7 +4,7 @@ if typing.TYPE_CHECKING:
     from . import CommonFSM
 
 from raya.logger import RaYaLogger
-from raya.exceptions import RayaCommandAlreadyRunning, RayaFileDoesNotExist
+from raya.exceptions import RayaCommandAlreadyRunning, RayaFileDoesNotExist, RayaCommandTimeout
 
 from .constants import DELAY_BEETWEEN_SOUND_LOOP, LEDS_GARY_SPEAKING
 
@@ -97,4 +97,6 @@ class CommonHelpers():
                 f'Audio file \'{audio}\' not found'
             )
         except RayaCommandAlreadyRunning:
+            pass
+        except RayaCommandTimeout:
             pass
