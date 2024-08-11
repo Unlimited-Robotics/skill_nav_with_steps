@@ -33,7 +33,6 @@ class AutomaticDoor:
             'quad_sigma': 0.0,
             'decode_sharpening' : 0.25,
             'refine_edges' : 1,
-            # TODO: check if the detector allows tags of different sizes
             'tag_size' : self.tags_sizes[0],
         }
         
