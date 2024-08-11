@@ -21,11 +21,10 @@ class Helpers(CommonHelpers):
         super().__init__(app=app)
         self._fsm: AutomaticDoorFSM
         
-        self.detectors = dict()
-        self._tags = dict()
-        self.task_timer_name = 'timer_tag_door'
-        self.detector_is_ready = False
-        self.is_inside_initial_zone = False
+        self.__detectors = dict()
+        self.__tags = dict()
+        self.__readyDetectorFlag = False
+        self.withinInitialZone = False
 
 
     async def enable_cameras(self):
@@ -43,24 +42,24 @@ class Helpers(CommonHelpers):
     async def _enable_door_detection(self):
         await self.__reset_door_tags_values()
 
-        if len(self.detectors.keys()) > 0:
+        if len(self.__detectors.keys()) > 0:
             self.log.error('Detectors already enabled')
             return
 
         # models
         self.log.debug('Enabling models')
-        self.detectors = dict()
+        self.__detectors = dict()
         for camera in CAMERAS_DETECTING_DOOR:
             detector: TagsDetectorHandler = await self.app.cv.enable_model(
                 **self._fsm.step._model,
                 source=camera,
             )
-            self.detectors[camera] = detector
+            self.__detectors[camera] = detector
         
         # detectors listener
         self.log.debug('Enabling detectors listener')
-        for detector_index in self.detectors:
-            detector: TagsDetectorHandler = self.detectors[detector_index]
+        for detector_index in self.__detectors:
+            detector: TagsDetectorHandler = self.__detectors[detector_index]
             detector.set_img_predictions_callback(
                 callback=self._door_state_tag_listener,
                 as_dict=True,
@@ -72,29 +71,29 @@ class Helpers(CommonHelpers):
     async def _disable_door_detection(self):
         # models
         self.log.debug('Disabling models')
-        for detector in self.detectors:
-            await self.app.cv.disable_model(model_obj=self.detectors[detector])
+        for detector in self.__detectors:
+            await self.app.cv.disable_model(model_obj=self.__detectors[detector])
         await self.__reset_door_tags_values()
 
 
     async def __reset_door_tags_values(self):
-        self.detector_is_ready = False
+        self.__readyDetectorFlag = False
         for tag in self._fsm.step._door_tags[f'tag{self._fsm.step.tags_family}']:
-            self._tags[tag] = {
+            self.__tags[tag] = {
                 'visible': False,
                 'last_time': datetime.datetime.min,
             }
 
 
     def _door_state_tag_listener(self, detections, image):
-        if self.detector_is_ready is False:
-            self.detector_is_ready = True
+        if self.__readyDetectorFlag is False:
+            self.__readyDetectorFlag = True
         
         if detections:
             for tag in detections:
                 tag_id = tag['tag_id']
                 if tag_id in self._fsm.step._door_tags[f'tag{self._fsm.step.tags_family}']:
-                    self._tags[tag_id] = {
+                    self.__tags[tag_id] = {
                         'visible': True,
                         'last_time': datetime.datetime.now(),
                     }
@@ -102,7 +101,7 @@ class Helpers(CommonHelpers):
 
     async def tag_door_visible(self, default_tag: int = -1):
         if default_tag != -1:
-            last = self._tags[default_tag]['last_time']
+            last = self.__tags[default_tag]['last_time']
             now = datetime.datetime.now()
             delta = now - last 
             self.log.debug(f'delta {delta}')
@@ -116,7 +115,7 @@ class Helpers(CommonHelpers):
 
 
     async def detector_ready(self):
-        return self.detector_is_ready
+        return self.__readyDetectorFlag
 
     
     async def nav_feedback_async(self, code, msg, distance, speed):
