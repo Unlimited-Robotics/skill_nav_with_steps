@@ -35,12 +35,13 @@ class Transitions(CommonTransitions):
                 )
                 await self.helpers.custom_cancel_sound()
                 await self.helpers.custom_turn_off_leds()
+                
                 await self.helpers.gary_play_audio(
                     audio=SOUND_OPEN_DOOR_THANKS,
                     animation_head_leds=LEDS_DOOR_OPENED,
-                    wait=True,
                 )
                 self._door_was_close = False
+                self.app.sleep(DELAY_AFTER_DOOR_OPENED)
                 # TODO: set last correct ui screen
             self.set_state('NAVIGATE_THROUGH_DOOR')
         else:
