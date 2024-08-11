@@ -25,10 +25,14 @@ class Transitions(CommonTransitions):
 
         
     async def WAIT_FOR_DOOR_OPEN(self):
-        tag_visible = await self.helpers.tag_door_visible()
+        tag_visible = await self.helpers.tag_door_visible(
+            default_tag=self.helpers._fsm.step.tags_ids[0]
+        )
         if not tag_visible:
             if self._door_was_close == True:
-                self.app.log.debug('The door is open, Navigating through the door...')
+                self.app.log.debug(
+                    'The door is open, navigating through it...'
+                )
                 await self.helpers.custom_cancel_sound()
                 await self.helpers.custom_turn_off_leds()
                 await self.helpers.gary_play_audio(
@@ -41,7 +45,9 @@ class Transitions(CommonTransitions):
             self.set_state('NAVIGATE_THROUGH_DOOR')
         else:
             if self._door_was_close == False:
-                self.app.log.debug('The door is closed, waiting for the door to open...')
+                self.app.log.debug(
+                    'The door is closed, waiting for it to open'
+                )
                 try:
                     await self.app.ui.show_animation(
                         **UI_SCREEN_WAIT_FOR_DOOR_OPEN
@@ -69,7 +75,9 @@ class Transitions(CommonTransitions):
             # 116 nav could compute a path
             if nav_error[0] == 0:
                 self.set_state('END')
-            elif nav_error[0] == 116 and await self.helpers.tag_door_visible():
+            elif nav_error[0] == 116 and await self.helpers.tag_door_visible(
+                default_tag=self.helpers._fsm.step.tags_ids[0]
+            ):
                 self.set_state('WAIT_FOR_DOOR_OPEN')
             else:
                 self.log.error(f'Navigation error: \'{nav_error}\'')

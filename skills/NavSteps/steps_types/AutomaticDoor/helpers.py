@@ -46,13 +46,6 @@ class Helpers(CommonHelpers):
         if len(self.detectors.keys()) > 0:
             self.log.error('Detectors already enabled')
             return
-        
-        # timers
-        self.log.debug('Enabling timers')
-        self.app.create_task(
-            name=self.task_timer_name,
-            afunc=self.timer_reset_tags_values
-        )
 
         # models
         self.log.debug('Enabling models')
@@ -77,12 +70,6 @@ class Helpers(CommonHelpers):
 
 
     async def _disable_door_detection(self):
-        try:
-            # timers
-            self.app.cancel_task(name=self.task_timer_name)
-        except RayaTaskNotRunning:
-            pass
-
         # models
         self.log.debug('Disabling models')
         for detector in self.detectors:
@@ -113,26 +100,17 @@ class Helpers(CommonHelpers):
                     }
 
 
-    async def timer_reset_tags_values(self):
-        while True:
-            for tag in self._fsm.step._door_tags[f'tag{self._fsm.step.tags_family}']:
-                last_time = self._tags[tag]['last_time']
-                current_time = datetime.datetime.now()
-                if current_time - last_time >= \
-                        datetime.timedelta(
-                            seconds=DOOR_TAG_TIMEOUT
-                        ):
-                    self._tags[tag]['visible'] = False
-            await self.app.sleep(DOOR_TAG_CALLBACK_TIMER)
-
-
     async def tag_door_visible(self, default_tag: int = -1):
         if default_tag != -1:
-            return self._tags[default_tag]['visible']
+            last = self._tags[default_tag]['last_time']
+            now = datetime.datetime.now()
+            delta = now - last 
+            self.log.debug(f'delta {delta}')
+            return delta < datetime.timedelta(seconds=DOOR_TAG_TIMEOUT)
     
         # Check if any of the tags is visible
-        if any([self._tags[tag]['visible'] == True for tag in self._fsm.step.tags_ids]):
-            return True
+        # if any([self._tags[tag]['last_time'] == True for tag in self._fsm.step.tags_ids]):
+        #     return True
 
         return False
 

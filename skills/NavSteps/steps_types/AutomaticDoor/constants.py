@@ -2,8 +2,7 @@ TYPE_NAME = 'automatic_door'
 
 CAMERAS_DETECTING_DOOR = ['nav_bottom']
 
-DOOR_TAG_CALLBACK_TIMER = 1.0
-DOOR_TAG_TIMEOUT = 1.0
+DOOR_TAG_TIMEOUT = 3.0
 
 
 from raya.enumerations import UI_THEME_TYPE, LEDS_EXECUTION_CONTROL
