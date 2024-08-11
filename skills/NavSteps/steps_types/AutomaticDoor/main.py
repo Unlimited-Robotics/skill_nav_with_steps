@@ -38,7 +38,7 @@ class AutomaticDoor:
         }
         
         self._model = dict()
-        self._model['name'] = 'apriltags'
+        self._model['name'] = 'apriltags_cpp'
         self._model['model_params'] = self._door_tags_model
         
         self.fsm = AutomaticDoorFSM(
