@@ -104,7 +104,7 @@ class Helpers(CommonHelpers):
             last = self.__tags[default_tag]['last_time']
             now = datetime.datetime.now()
             delta = now - last 
-            self.log.debug(f'delta {delta}')
+            # self.log.debug(f'delta {delta}')
             return delta < datetime.timedelta(seconds=DOOR_TAG_TIMEOUT)
     
         # Check if any of the tags is visible
