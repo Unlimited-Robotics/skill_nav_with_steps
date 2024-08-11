@@ -28,7 +28,7 @@ class Transitions(CommonTransitions):
         tag_visible = await self.helpers.tag_door_visible()
         if not tag_visible:
             if self._door_was_close == True:
-                self.app.log.debug('The door is open, Entering the warehouse')
+                self.app.log.debug('The door is open, Navigating through the door...')
                 await self.helpers.custom_cancel_sound()
                 await self.helpers.custom_turn_off_leds()
                 await self.helpers.gary_play_audio(
@@ -41,7 +41,7 @@ class Transitions(CommonTransitions):
             self.set_state('NAVIGATE_THROUGH_DOOR')
         else:
             if self._door_was_close == False:
-                self.app.log.debug('The door is closed, waiting for it to open')
+                self.app.log.debug('The door is closed, waiting for the door to open...')
                 try:
                     await self.app.ui.show_animation(
                         **UI_SCREEN_WAIT_FOR_DOOR_OPEN
