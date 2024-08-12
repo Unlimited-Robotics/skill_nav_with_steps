@@ -35,17 +35,13 @@ class Helpers(AutomaticDoorHelpers):
     async def call_task(self):
         await self.app.sleep(TIME_BEFORE_FIRST_CALL)
         while True:
-            request_args = dict()
-            request_args['message'] = FLEET_CALL_MESSAGE
             user = self._fsm.step.phone_call_user_id
             self.log.warn(f'Calling the user \'{user}\'...')
             try:
                 await self.app.fleet.request_user_action(
-                        request_type='call',
                         user_id=user,
                         wait=True,
-                        timeout=1.0,
-                        request_args=request_args,
+                        **FLEET_REQUEST_USER_ACTION,
                     )
             except RayaFleetTimeout:
                 pass
