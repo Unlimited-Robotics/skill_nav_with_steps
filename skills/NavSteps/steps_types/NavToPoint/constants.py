@@ -1,7 +1,14 @@
 TYPE_NAME = 'nav_to_point'
 
-NAVIGATION_TRY_LIMIT = 1
-OBSTACLE_DETECTION_THRESHOLDS = [2, 7]
+OBSTACLE_DETECTION_THRESHOLDS = [2, 4]
+
+NAV_CODES_IS_NAVIGATING = [4, 6]
+# 14, checking if path is valid
+# 4, new path compute
+
+NAV_CODES_OBSTACLE_DETECTED = [9]
+# 19, plan NOT VALID
+# 9, could not navigate
 
 from raya.enumerations import LEDS_EXECUTION_CONTROL, UI_THEME_TYPE
 from raya.enumerations import UI_ANIMATION_TYPE

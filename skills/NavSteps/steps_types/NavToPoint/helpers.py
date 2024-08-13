@@ -20,18 +20,23 @@ class Helpers(RetryHelpers):
         
         self.__obstacle_tries = 0
         self.__navigating_tries = 0
+        
+        self.last_code = -1
 
 
     async def nav_feedback_async(self, code, msg, distance, speed):
+        if self.last_code == code:
+            return
+        else:
+            self.last_code = code
+
         self.log.debug(
             'nav_feedback_async: '
             f'{code}, {msg}, {distance}, {speed}'
         )
         
-        if code == 6:
-            # navigating
-            if self.__navigating_tries >= NAVIGATION_TRY_LIMIT and \
-                    self.__obstacle_tries != 0:
+        if code in NAV_CODES_IS_NAVIGATING:
+            if self.__obstacle_tries != 0:
                 self.log.warn(
                         'Navigation tries limit reached, '
                         'resetting obstacle tries to 0'
@@ -50,15 +55,12 @@ class Helpers(RetryHelpers):
             
             self.__navigating_tries += 1
 
-        elif code == 7:
-            # obstacle detected
+        elif code == NAV_CODES_OBSTACLE_DETECTED:
             self.__obstacle_tries += 1
             self.__navigating_tries = 0
-            
             self.__navigating_leds_on = False
-            await self.app.ui.show_last_animation()
 
-        elif code == 9:
+        
             if self.__obstacle_tries >= OBSTACLE_DETECTION_THRESHOLDS[1]:
                 self.log.error(
                     'Obstacle detected more than' 
