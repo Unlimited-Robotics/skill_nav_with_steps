@@ -13,7 +13,8 @@ class AutomaticDoor:
             tags_ids: list,
             tags_sizes: list,
             tags_family: str = '36h11',
-            timeout: float = 60.0
+            timeout: float = 60.0,
+            custom_ui_screen: dict = UI_SCREEN_WAIT_FOR_DOOR_OPEN,
         ) -> None:
         self.name = name
         self.zone_name = zone_name
@@ -22,6 +23,7 @@ class AutomaticDoor:
         self.tags_family = tags_family
         self.tags_sizes = tags_sizes
         self.timeout = timeout
+        self.custom_ui_screen = custom_ui_screen
         
         self._door_tags = dict()
         self._door_tags[f'tag{self.tags_family}'] = self.tags_ids

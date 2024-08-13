@@ -18,7 +18,8 @@ class ManualDoor(AutomaticDoor):
             tags_family: str = '36h11',
             phone_call_timeout: float = -1.0,
             phone_call_user_id: str = None,
-            timeout: float = -1.0
+            timeout: float = -1.0,
+            custom_ui_screen: dict = UI_SCREEN_WAIT_FOR_DOOR_OPEN,
         ) -> None:
         super.__init__(
             name=name,
@@ -28,6 +29,7 @@ class ManualDoor(AutomaticDoor):
             tags_family=tags_family,
             tags_sizes=tags_sizes,
             timeout=timeout,
+            custom_ui_screen=custom_ui_screen,
         )
         self.fsm = ManualDoorFSM(
             self_object=self,

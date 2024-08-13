@@ -4,6 +4,7 @@ NAVIGATION_TRY_LIMIT = 1
 OBSTACLE_DETECTION_THRESHOLDS = [2, 7]
 
 from raya.enumerations import LEDS_EXECUTION_CONTROL, UI_THEME_TYPE
+from raya.enumerations import UI_ANIMATION_TYPE
 
 SOUND_OBSTACLE_DETECTED_1 = {
         'path': 'res:Clear_the_way.mp3',
@@ -46,5 +47,15 @@ UI_LOTTIE_DELIVERING_PACKAGE = 'res:lottie_package_walking.json'
 UI_SCREEN_NAVIGATING = {
     'title':'Hello! I\'m Gary, your delivery robot',
     'lottie': UI_LOTTIE_DELIVERING_PACKAGE,
+    **UI_COMMON_OPTIONS
+}
+
+
+UI_OBSTACLE_DETECTED = 'res:caution.gif'
+UI_SCREEN_OBSTACLE_DETECTED = {
+    'title': 'Please clear the way',
+    'subtitle': 'I\'m on duty',
+    'path': UI_OBSTACLE_DETECTED,
+    'format': UI_ANIMATION_TYPE.GIF,
     **UI_COMMON_OPTIONS
 }

@@ -51,9 +51,7 @@ class Actions(RetryActions):
                 )
             except RayaNavAlreadyNavigating:
                 self.log.error('RayaNavAlreadyNavigating')
-        await self.app.ui.show_animation(
-            **self.helpers._fsm.step.custom_ui_screen
-        )
+        await self.app.ui.show_last_animation()
 
     
     async def leave_NAVIGATING_TO_POINT(self):

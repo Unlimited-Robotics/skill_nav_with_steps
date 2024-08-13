@@ -48,6 +48,11 @@ class RayaApplication(RayaApplicationBase):
             setup_args=setup_args
         )
         self.log.warn(f'setup result: {result}')
+        
+        await self.ui.show_animation(
+            title = 'Hello! i am Raya',
+            lottie =  'res:lottie_package_walking.json',
+        )
 
 
     async def loop(self):

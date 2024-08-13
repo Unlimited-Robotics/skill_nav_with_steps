@@ -25,9 +25,10 @@ class Actions(CommonActions):
         await self.app.ui.display_action_screen(
             **UI_CALL_TO_ACTION_TELEOPERATION_DONE,
             wait=False,
-            callback=self.helpers.cb_teleoperation_ui_response
+            callback=self.helpers.cb_teleoperation_ui_response,
+            dont_save_last_ui=True
         )
 
 
     async def enter_END(self):
-        pass
+        await self.app.ui.show_last_animation()

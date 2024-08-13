@@ -51,7 +51,8 @@ class Transitions(CommonTransitions):
                 )
                 try:
                     await self.app.ui.show_animation(
-                        **UI_SCREEN_WAIT_FOR_DOOR_OPEN
+                        **self.helpers._fsm.step.custom_ui_screen,
+                        dont_save_last_ui=True
                     )
                 except FileNotFoundError as e:
                     self.log.error(f'Error showing animation: {e}')
