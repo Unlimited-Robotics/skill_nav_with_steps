@@ -10,7 +10,7 @@ TEST_POINT = {
 
 TEST_POINT_OPTIONS = {
     'options': {
-        'behavior_tree': 'navigate_and_replan_if_needed'
+        'behavior_tree': 'nav_with_cart_restricted39'
     },
 }
 
