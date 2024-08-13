@@ -90,6 +90,9 @@ class SkillNavSteps(RayaFSMSkill):
             elif step_type == AUTOMATIC_DOOR_TYPE_NAME:
                 automatic_door = AutomaticDoor(**step)
                 self._steps.append(automatic_door)
+            elif step_type == TELEOPERATION_TYPE_NAME:
+                teleoperation = Teleoperation(**step)
+                self._steps.append(teleoperation)
             elif step_type == TEST_TYPE_NAME:
                 test = CommonType(
                     name=step.get('name')
