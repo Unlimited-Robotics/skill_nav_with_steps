@@ -16,6 +16,8 @@ class CommonHelpers():
         self._fsm: CommonFSM
         self.log: RaYaLogger
 
+        self.last_result = -1, 'You should not see this message'
+
 
     def __setattr__(self, name, value):
         if name == '_fsm':
@@ -100,3 +102,26 @@ class CommonHelpers():
             pass
         except RayaCommandTimeout:
             pass
+
+    
+    async def nav_feedback_async(self, code, msg, distance, speed):
+        self.log.debug(
+            'nav_feedback_async: '
+            f'{code}, {msg}, {distance}, {speed}'
+        )
+        
+        if code == 0:
+            self.last_result = code, msg
+    
+
+    async def nav_finish_async(self, code, msg):
+        self.log.debug(
+            f'nav_finish_async: {code}, {msg}'
+        )
+        self.last_result = code, msg
+        await self.custom_cancel_sound()
+        await self.custom_turn_off_leds()
+
+
+    def get_last_result(self):
+        return self.last_result

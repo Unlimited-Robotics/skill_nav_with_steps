@@ -25,7 +25,7 @@ class Transitions(RetryTransitions):
         if self.app.nav.is_navigating():
             return
         
-        nav_error = self.app.nav.get_last_result()
+        nav_error = self.helpers.get_last_result()
         if nav_error[0] == 0:
             self.set_state('END')
         else:

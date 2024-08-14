@@ -25,15 +25,17 @@ class Helpers(RetryHelpers):
 
 
     async def nav_feedback_async(self, code, msg, distance, speed):
+        await super().nav_feedback_async(
+            code=code, 
+            msg=msg, 
+            distance=distance, 
+            speed=speed
+        )
+        
         if self.last_code == code:
             return
         else:
             self.last_code = code
-
-        self.log.debug(
-            'nav_feedback_async: '
-            f'{code}, {msg}, {distance}, {speed}'
-        )
         
         if code in NAV_CODES_IS_NAVIGATING:
             if self.__obstacle_tries != 0:
@@ -85,8 +87,4 @@ class Helpers(RetryHelpers):
 
 
     async def nav_finish_async(self, code, msg):
-        self.log.debug(
-            f'nav_finish_async: {code}, {msg}'
-        )
-        await self.custom_cancel_sound()
-        await self.custom_turn_off_leds()
+        await super().nav_finish_async(code=code, msg=msg)

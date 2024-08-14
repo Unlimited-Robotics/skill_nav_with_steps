@@ -72,7 +72,7 @@ class Transitions(CommonTransitions):
             self.set_state('END')
         
         if not self.app.nav.is_navigating():
-            nav_error = self.app.nav.get_last_result()
+            nav_error = self.helpers.get_last_result()
             # 18 nav was canceled 
             # 116 nav could compute a path
             if nav_error[0] == 0:

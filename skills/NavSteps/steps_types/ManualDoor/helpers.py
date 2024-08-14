@@ -54,13 +54,13 @@ class Helpers(AutomaticDoorHelpers):
 
 
     async def nav_feedback_async(self, code, msg, distance, speed):
-        self.log.debug(
-            'nav_feedback_async: '
-            f'{code}, {msg}, {distance}, {speed}'
+        await super().nav_feedback_async(
+            code=code, 
+            msg=msg, 
+            distance=distance, 
+            speed=speed
         )
 
 
     async def nav_finish_async(self, code, msg):
-        self.log.debug(
-            f'nav_finish_async: {code}, {msg}'
-        )
+        await super().nav_finish_async(code=code, msg=msg)
