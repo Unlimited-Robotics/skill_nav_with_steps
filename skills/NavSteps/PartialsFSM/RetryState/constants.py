@@ -10,11 +10,10 @@ UI_COMMON_OPTIONS = {
 }
 
 UI_SCREEN_WAIT_FOR_HELP_SELECTOR = {
-    'title':'I\'m stuck, please help me, and choose an option',
+    'title':'Teleoperation in process',
     'max_items_shown': 0,
     'data': [
-            {'id': 1, 'name': 'Abort App 🚫'}, 
-            {'id': 2, 'name': 'Continue 🚶‍♂️'},
+            {'id': 1, 'name': 'Continue'},
         ],
     **UI_COMMON_OPTIONS
 }

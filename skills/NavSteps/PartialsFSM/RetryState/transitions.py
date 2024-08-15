@@ -39,8 +39,6 @@ class Transitions(CommonTransitions):
         selected_option = response['selected_option']
         options = UI_SCREEN_WAIT_FOR_HELP_SELECTOR['data']
         if selected_option['name'] == options[0]['name']:
-            self.set_state('ABORT')
-        elif selected_option['name'] == options[1]['name']:
             await self.app.sleep(TIME_TO_WAIT_AFTER_CONTINUE)
             self.set_state('CONTINUE')
 
