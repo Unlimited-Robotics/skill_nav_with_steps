@@ -9,12 +9,10 @@ UI_COMMON_OPTIONS = {
     'back_button_text': '',
 }
 
-UI_SCREEN_WAIT_FOR_HELP_SELECTOR = {
-    'title':'Teleoperation in process',
-    'max_items_shown': 0,
-    'data': [
-            {'id': 1, 'name': 'Continue'},
-        ],
+UI_CALL_TO_ACTION_TELEOPERATION = {
+    'title': 'Teleoperation in process...',
+    'subtitle': 'Please wait until the teleoperation is done.',
+    'button_text': 'Done',
     **UI_COMMON_OPTIONS
 }
 
