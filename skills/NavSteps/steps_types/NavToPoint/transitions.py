@@ -23,7 +23,17 @@ class Transitions(RetryTransitions):
 
     async def NAVIGATING_TO_POINT(self):
         if self.app.nav.is_navigating():
-            return
+            if not self.helpers._fsm.step.partial_navigation:
+                return
+            
+            if self.helpers.remaining_distance < \
+                    self.helpers._fsm.step.finish_when_distance_less_than:
+                self.log.warn((
+                    'Distance to point is less than '
+                    f'{self.helpers._fsm.step.finish_when_distance_less_than}'
+                    ', finishing step'
+                ))
+                self.set_state('END')
         
         nav_error = self.helpers.get_last_result()
         if nav_error[0] == 0:

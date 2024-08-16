@@ -22,6 +22,7 @@ class Helpers(RetryHelpers):
         self.__navigating_tries = 0
         
         self.last_code = -1
+        self.remaining_distance = -1
 
 
     async def nav_feedback_async(self, code, msg, distance, speed):
@@ -31,6 +32,8 @@ class Helpers(RetryHelpers):
             distance=distance, 
             speed=speed
         )
+        
+        self.remaining_distance = distance
         
         if self.last_code == code:
             return
