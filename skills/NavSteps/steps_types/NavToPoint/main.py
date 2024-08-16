@@ -14,7 +14,7 @@ class NavToPoint:
             teleoperator_timeout: float = -1.0,
             custom_ui_screen: dict = UI_SCREEN_NAVIGATING,
             custom_ui_screen_obstacle: dict = UI_SCREEN_OBSTACLE_DETECTED,
-            finish_when_distance_less_than: float = -1.0,
+            finish_when_distance_less_than: float = 3.0,
         ) -> None:
         self.name = name
         self.type = TYPE_NAME
