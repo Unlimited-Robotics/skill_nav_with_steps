@@ -1,4 +1,5 @@
 import typing
+import time
 if typing.TYPE_CHECKING:
     from src.app import RayaApplication
 
@@ -26,20 +27,32 @@ class Transitions(RetryTransitions):
             if not self.helpers._fsm.step.partial_navigation:
                 return
             
-            if self.helpers.remaining_distance < \
-                    self.helpers._fsm.step.finish_when_distance_less_than:
+            if len(self.helpers._fsm.step.points) == 1:
+                return
+            
+            
+            if (self.helpers.remaining_distance < \
+                    self.helpers._fsm.step.finish_when_distance_less_than
+                ):
+                    # or (time.time() - self.helpers.last_time > 5.0):
                 self.log.warn((
                     'Distance to point is less than '
                     f'{self.helpers._fsm.step.finish_when_distance_less_than}'
                     ', finishing step'
                 ))
-                self.set_state('END')
+                self.set_state('PARTIAL_NAVIGATION_REACHED')
         
-        nav_error = self.helpers.get_last_result()
+        nav_error = self.app.nav.get_last_result()
+        self.log.error(f'nav_error_code: {nav_error}')
         if nav_error[0] == 0:
             self.set_state('END')
         else:
             self.set_state('NAVIGATING_TO_POINT_FAILED')
+
+
+    async def PARTIAL_NAVIGATION_REACHED(self):
+        self.helpers._fsm.step.points.pop(0)
+        self.set_state('NAVIGATING_TO_POINT')
 
 
     async def NAVIGATING_TO_POINT_FAILED(self):

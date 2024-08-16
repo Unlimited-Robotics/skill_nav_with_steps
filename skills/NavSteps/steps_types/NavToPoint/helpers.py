@@ -23,6 +23,8 @@ class Helpers(RetryHelpers):
         
         self.last_code = -1
         self.remaining_distance = -1
+        # self.last_time = None
+        # self.flag_update_timer = True
 
 
     async def nav_feedback_async(self, code, msg, distance, speed):

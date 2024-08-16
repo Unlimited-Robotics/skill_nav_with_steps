@@ -2,15 +2,12 @@ from raya.enumerations import POSITION_UNIT, ANGLE_UNIT
 
 class Point:
     
-    def __init__(self, **kwargs) -> None:
-        self.x: float = \
-            kwargs.pop('x')
-        self.y: float = \
-            kwargs.pop('y')
-        self.angle: float = \
-            kwargs.pop('angle')
+    def __init__(self, *args, **kwargs) -> None:
+        self.x: float = float(args[0] if args else kwargs.pop('x'))
+        self.y: float = float(args[1] if args else kwargs.pop('y'))
+        self.angle: float = float(args[2] if args else kwargs.pop('angle'))
         self.ang_unit: ANGLE_UNIT = \
-            kwargs.pop('ang_unit', ANGLE_UNIT.DEGREES)
+            kwargs.pop('ang_unit', ANGLE_UNIT.RADIANS)
         self.pos_unit: POSITION_UNIT = \
             kwargs.pop('pos_unit', POSITION_UNIT.PIXELS)
 

@@ -1,4 +1,5 @@
 import typing
+import time
 if typing.TYPE_CHECKING:
     from src.app import RayaApplication
 
@@ -19,8 +20,13 @@ class Actions(RetryActions):
 
 
     async def enter_NAVIGATING_TO_POINT(self):
+    #     if self.helpers.flag_update_timer:
+    #         self.helpers.last_time = time.time()
+    #     else:
+    #         self.helpers.flag_update_timer = True
+        
         if self.app.nav.is_navigating():
-            point = self.helpers._fsm.step.point.get_only_coordinates()
+            point = self.helpers._fsm.step.points[0].get_only_coordinates()
             self.log.warn('Already navigating')
             self.log.warn(f'Updating current nav goal to: {point}')
             try:
@@ -31,7 +37,7 @@ class Actions(RetryActions):
                     wait=False
                 )
             except RayaNavNotNavigating:
-                point = self.helpers._fsm.step.point.to_dict()
+                point = self.helpers._fsm.step.points[0].to_dict()
                 self.log.debug(f'Navigating to point: {point}')
                 await self.app.nav.navigate_to_position(
                     **point,
@@ -40,7 +46,7 @@ class Actions(RetryActions):
                     wait=False
                 )
         else:
-            point = self.helpers._fsm.step.point.to_dict()
+            point = self.helpers._fsm.step.points[0].to_dict()
             self.log.debug(f'Navigating to point: {point}')
             try:
                 await self.app.nav.navigate_to_position(
@@ -53,6 +59,11 @@ class Actions(RetryActions):
                 self.log.error('RayaNavAlreadyNavigating')
         await self.app.ui.show_last_animation()
 
+
+    async def enter_NAVIGATING_TO_POINT_FAILED(self):
+        # self.helpers.flag_update_timer = False
+        pass
+        
     
     async def leave_NAVIGATING_TO_POINT(self):
         await self.helpers.custom_turn_off_leds()

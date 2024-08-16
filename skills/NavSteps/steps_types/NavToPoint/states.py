@@ -6,6 +6,7 @@ STATES = [
         *CommonStates.STATES,
         *RetryStates.STATES,
         'NAVIGATING_TO_POINT',
+        'PARTIAL_NAVIGATION_REACHED',
         'NAVIGATING_TO_POINT_FAILED'
 ]
 
