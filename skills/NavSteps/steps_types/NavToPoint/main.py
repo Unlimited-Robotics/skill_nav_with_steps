@@ -21,7 +21,7 @@ class NavToPoint:
         self.nav_options = nav_options
         
         self.points = []
-        if point.keys() != {}:
+        if len(point.keys()) > 0:
             point = Point(**point)
             self.points = [point]
         else:
