@@ -30,11 +30,13 @@ class Transitions(RetryTransitions):
             if len(self.helpers._fsm.step.points) == 1:
                 return
             
-            
+            if self.helpers.remaining_distance == -1:
+                return
+
             if (self.helpers.remaining_distance < \
                     self.helpers._fsm.step.finish_when_distance_less_than
                 ):
-                    # or (time.time() - self.helpers.last_time > 5.0):
+
                 self.log.warn((
                     'Distance to point is less than '
                     f'{self.helpers._fsm.step.finish_when_distance_less_than}'
@@ -42,10 +44,15 @@ class Transitions(RetryTransitions):
                 ))
                 self.set_state('PARTIAL_NAVIGATION_REACHED')
         
-        nav_error = self.app.nav.get_last_result()
+        nav_error = self.helpers.get_last_result()
+        if nav_error[0] == -1:
+            return
         self.log.error(f'nav_error_code: {nav_error}')
         if nav_error[0] == 0:
-            self.set_state('END')
+            if len(self.helpers._fsm.step.points) == 1:
+                self.set_state('END')
+            else:
+                self.set_state('PARTIAL_NAVIGATION_REACHED')
         else:
             self.set_state('NAVIGATING_TO_POINT_FAILED')
 
@@ -57,9 +64,12 @@ class Transitions(RetryTransitions):
 
     async def NAVIGATING_TO_POINT_FAILED(self):
         if self.helpers._fsm.step.teleoperator_if_fail:
-            self.helpers.retry_step(
-                last_state='NAVIGATING_TO_POINT',
-                timeout=self.helpers._fsm.step.teleoperator_timeout,
-                transitions=self,
-            )
+            if len(self.helpers._fsm.step.points) == 1:
+                self.helpers.retry_step(
+                    last_state='NAVIGATING_TO_POINT',
+                    timeout=self.helpers._fsm.step.teleoperator_timeout,
+                    transitions=self,
+                )
+            else:
+                self.helpers._fsm.step.points.pop(0)
         self.set_state('NAVIGATING_TO_POINT')

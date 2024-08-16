@@ -1,3 +1,4 @@
+import copy
 from typing import Union, List
 
 from raya.skills import RayaFSMSkill
@@ -73,7 +74,9 @@ class SkillNavSteps(RayaFSMSkill):
     
     
     async def enter_SETUP_STEPS(self):
-        for step in self.execute_args['steps']:
+        steps_list = copy.deepcopy(self.execute_args['steps'])
+        
+        for step in steps_list:
             step_name = step.get('name')
             step_type = step.pop('type')
             

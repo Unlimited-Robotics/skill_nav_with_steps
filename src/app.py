@@ -55,7 +55,7 @@ class RayaApplication(RayaApplicationBase):
         )
 
 
-    async def loop(self):
+    async def main(self):
         execute_args = {
             'steps': EXAMPLE_STEPS
         }

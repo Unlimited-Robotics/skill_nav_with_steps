@@ -7,7 +7,8 @@ class NavToPoint:
 
     def __init__(self,
             name: str,
-            points: list,
+            point: dict = {},
+            points: list = [],
             nav_options: dict = {},
             teleoperator_if_fail: bool = True,
             teleoperator_timeout: float = -1.0,
@@ -20,8 +21,8 @@ class NavToPoint:
         self.nav_options = nav_options
         
         self.points = []
-        if isinstance(points, dict):
-            point = Point(**points, **nav_options)
+        if point.keys() != {}:
+            point = Point(**point)
             self.points = [point]
         else:
             for point in points:

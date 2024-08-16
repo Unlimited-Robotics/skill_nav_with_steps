@@ -105,13 +105,12 @@ class CommonHelpers():
 
     
     async def nav_feedback_async(self, code, msg, distance, speed):
+        if code == 241:
+            return
         self.log.debug(
             'nav_feedback_async: '
             f'{code}, {msg}, {distance}, {speed}'
         )
-        
-        if code == 0:
-            self.last_result = code, msg
     
 
     async def nav_finish_async(self, code, msg):

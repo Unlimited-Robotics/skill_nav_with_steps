@@ -20,11 +20,6 @@ class Actions(RetryActions):
 
 
     async def enter_NAVIGATING_TO_POINT(self):
-    #     if self.helpers.flag_update_timer:
-    #         self.helpers.last_time = time.time()
-    #     else:
-    #         self.helpers.flag_update_timer = True
-        
         if self.app.nav.is_navigating():
             point = self.helpers._fsm.step.points[0].get_only_coordinates()
             self.log.warn('Already navigating')
@@ -36,6 +31,8 @@ class Actions(RetryActions):
                     callback_finish_async=self.helpers.nav_finish_async,
                     wait=False
                 )
+                self.helpers.remaining_distance = -1
+                self.helpers.listen_feedback = False
             except RayaNavNotNavigating:
                 point = self.helpers._fsm.step.points[0].to_dict()
                 self.log.debug(f'Navigating to point: {point}')
@@ -45,6 +42,8 @@ class Actions(RetryActions):
                     callback_finish_async=self.helpers.nav_finish_async,
                     wait=False
                 )
+                self.helpers.remaining_distance = -1
+                self.helpers.listen_feedback = False
         else:
             point = self.helpers._fsm.step.points[0].to_dict()
             self.log.debug(f'Navigating to point: {point}')
@@ -55,13 +54,14 @@ class Actions(RetryActions):
                     callback_finish_async=self.helpers.nav_finish_async,
                     wait=False
                 )
+                self.helpers.remaining_distance = -1
+                self.helpers.listen_feedback = False
             except RayaNavAlreadyNavigating:
                 self.log.error('RayaNavAlreadyNavigating')
         await self.app.ui.show_last_animation()
 
 
     async def enter_NAVIGATING_TO_POINT_FAILED(self):
-        # self.helpers.flag_update_timer = False
         pass
         
     
