@@ -94,7 +94,6 @@ class SkillNavSteps(RayaFSMSkill):
             step = self.replace_placeholders(step_dict, self.execute_args['args'])
             self.log.warn(f'Initializing step... {step}')
             
-            self.abort(error_code=1, error_msg='Error msg')
             step_name = step.get('name')
             step_type = step.pop('type')
             
