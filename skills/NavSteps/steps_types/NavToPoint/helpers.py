@@ -34,7 +34,7 @@ class Helpers(RetryHelpers):
             distance=distance, 
             speed=speed
         )
-        if code == 4:
+        if code in [4, 0]:
             self.listen_feedback = True
         
         if self.listen_feedback == False:
@@ -55,6 +55,7 @@ class Helpers(RetryHelpers):
                 self.__obstacle_tries = 0
             
             if self.__navigating_leds_on is False:
+                self.log.warn('Gary is navigating...')
                 await self.app.ui.show_last_animation()
                 await self.custom_animation(
                     **LEDS_NAVIGATING,
@@ -64,15 +65,22 @@ class Helpers(RetryHelpers):
             
             self.__navigating_tries += 1
 
-        elif code == NAV_CODES_OBSTACLE_DETECTED:
+        elif code in NAV_CODES_OBSTACLE_DETECTED:
             self.__obstacle_tries += 1
             self.__navigating_tries = 0
             self.__navigating_leds_on = False
+            
+            self.log.warn(f'obs detected: {self.__obstacle_tries}')
+            
+            await self.app.ui.show_animation(
+                **self._fsm.step.custom_ui_screen_obstacle,
+                dont_save_last_ui=True
+            )
 
-        
+        if self.__obstacle_tries > 0:
             if self.__obstacle_tries >= OBSTACLE_DETECTION_THRESHOLDS[1]:
                 self.log.error(
-                    'Obstacle detected more than' 
+                    'Obstacle detected '  
                     f' {OBSTACLE_DETECTION_THRESHOLDS[1]} times'
                 )
                 await self.gary_play_audio_predefined(
@@ -81,7 +89,7 @@ class Helpers(RetryHelpers):
                 )
             elif self.__obstacle_tries >= OBSTACLE_DETECTION_THRESHOLDS[0]:
                 self.log.error(
-                    'Obstacle detected more than '
+                    'Obstacle detected '
                     f'{OBSTACLE_DETECTION_THRESHOLDS[0]} times'
                 )
                 await self.gary_play_audio_predefined(
@@ -92,3 +100,5 @@ class Helpers(RetryHelpers):
 
     async def nav_finish_async(self, code, msg):
         await super().nav_finish_async(code=code, msg=msg)
+        await self.custom_turn_off_leds()
+        await self.custom_cancel_sound()
