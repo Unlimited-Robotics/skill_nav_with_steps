@@ -29,6 +29,12 @@ SOUNDS_OBSTACLES_DETECTED = [
     SOUND_OBSTACLE_DETECTED_2
 ]
 
+SOUND_TANK_YOU = {
+        'name': 'thank_you_1',
+        'volume': 100,
+        'duration': 1.0,
+    }
+
 LEDS_NOTIFY_OBSTACLE = {
     'group': 'head',
     'color': 'YELLOW',
