@@ -77,10 +77,9 @@ class Transitions(CommonTransitions):
             # 116 nav could compute a path
             if nav_error[0] == 0:
                 self.set_state('END')
-            elif await self.helpers.tag_door_visible(
+            elif nav_error[0] == 116 and await self.helpers.tag_door_visible(
                 default_tag=self.helpers._fsm.step.tags_ids[0]
             ):
-                self.log.debug('The Tag is visible, waiting for the door to open...')
                 self.set_state('WAIT_FOR_DOOR_OPEN')
             else:
                 self.log.error(f'Navigation error: \'{nav_error}\'')

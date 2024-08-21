@@ -22,8 +22,11 @@ class Actions(CommonActions):
         self.helpers.withinInitialZone = await self.app.nav.is_in_zone(
                 zone_name=self.helpers._fsm.step.zone_name
             )
+        self.log.warn('1')
         await self.helpers.enable_cameras()
+        self.log.warn('2')
         await self.helpers._enable_door_detection()
+        self.log.warn('3')
 
 
     async def enter_WAIT_FOR_DOOR_OPEN(self):

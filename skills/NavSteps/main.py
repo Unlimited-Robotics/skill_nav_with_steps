@@ -22,7 +22,7 @@ class SkillNavSteps(RayaFSMSkill):
     }
     
     DEFAULT_EXECUTE_ARGS = {
-        'args': {},
+        
     }
     
     REQUIRED_EXECUTE_ARGS = {
@@ -68,20 +68,6 @@ class SkillNavSteps(RayaFSMSkill):
 ##########################      HELPERS      ##################################
 ###############################################################################
 
-    def replace_placeholders(self, data, args):
-        if isinstance(data, dict):
-            return {k: self.replace_placeholders(v, args) for k, v in data.items()}
-        elif isinstance(data, list):
-            return [self.replace_placeholders(i, args) for i in data]
-        elif isinstance(data, str) and data.startswith('[') and data.endswith(']'):
-            key = data[1:-1]  # Strip off the square brackets
-            if key not in args:
-                self.log.error(f'Key \'{key}\' not found in args')
-            replace_value = args.get(key, data)
-            return replace_value
-        return data
-
-
 ###############################################################################
 #########################      ACTIONS       ##################################
 ###############################################################################
@@ -90,10 +76,7 @@ class SkillNavSteps(RayaFSMSkill):
     async def enter_SETUP_STEPS(self):
         steps_list = copy.deepcopy(self.execute_args['steps'])
         
-        for step_dict in steps_list:
-            step = self.replace_placeholders(step_dict, self.execute_args['args'])
-            self.log.warn(f'Initializing step... {step}')
-            
+        for step in steps_list:
             step_name = step.get('name')
             step_type = step.pop('type')
             

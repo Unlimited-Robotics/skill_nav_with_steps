@@ -40,32 +40,32 @@ class CommonHelpers():
     async def custom_cancel_sound(self):
         try:
             await self.app.sound.cancel_all_sounds()
-        except Exception as e:
-            self.log.error(f'cancel_all_sounds exception {e}')
+        except Exception:
+            pass
 
 
     async def custom_animation(self, wait=True, **kwargs):
         try:
             await self.app.leds.animation(**kwargs, wait=wait)
-        except Exception as e:
-            self.log.error(f'animation exception {e}')
+        except Exception:
+            pass
 
 
     async def custom_turn_off_leds(self, group = ''):
         if group != '':
             try:
                 await self.app.leds.turn_off_group(group)
-            except Exception as e:
-                self.log.error(f'turn_off_group exception {e}')
+            except Exception:
+                pass
         else:
             try:
                 await self.app.leds.turn_off_all()
-            except Exception as e:
-                self.log.error(f'turn_off_all exception {e}')
+            except Exception:
+                pass
 
 
     def sound_finish_callback(self, code, msg):
-        self.log.debug(f'Audio finished with code: {code}, msg: {msg}')
+        pass
 
     
     async def gary_play_audio(self, 
@@ -75,7 +75,6 @@ class CommonHelpers():
         ):
         try:
             if not self.app.sound.is_playing():
-                self.log.debug(f'Playing audio: {audio}')
                 await self.custom_turn_off_leds(group='head')
                 await self.app.sleep(DELAY_BEETWEEN_SOUND_LOOP)
                 await self.app.sound.play_sound(
