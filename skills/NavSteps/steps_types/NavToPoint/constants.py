@@ -3,12 +3,8 @@ TYPE_NAME = 'nav_to_point'
 OBSTACLE_DETECTION_THRESHOLDS = [1, 2]
 
 NAV_CODES_IS_NAVIGATING = [4, 6, 241]
-# 14, checking if path is valid
-# 4, new path compute
 
 NAV_CODES_OBSTACLE_DETECTED = [5, 7, 9]
-# 19, plan NOT VALID
-# 9, could not navigate
 
 # Code	Msg
 # 1	    new goal received 42

@@ -56,11 +56,11 @@ class Helpers(RetryHelpers):
             
             if self.__navigating_leds_on is False:
                 self.log.warn('Gary is navigating...')
-                await self.app.ui.show_last_animation()
                 await self.custom_animation(
                     **LEDS_NAVIGATING,
                     wait=False
                 )
+                await self.app.ui.show_last_animation()
                 self.__navigating_leds_on = True
             
             self.__navigating_tries += 1
@@ -70,7 +70,7 @@ class Helpers(RetryHelpers):
             self.__navigating_tries = 0
             self.__navigating_leds_on = False
             
-            self.log.warn(f'obs detected: {self.__obstacle_tries}')
+            self.log.warn(f'Obstacle detected counter: {self.__obstacle_tries}')
             
             await self.app.ui.show_animation(
                 **self._fsm.step.custom_ui_screen_obstacle,
@@ -79,19 +79,13 @@ class Helpers(RetryHelpers):
 
         if self.__obstacle_tries > 0:
             if self.__obstacle_tries >= OBSTACLE_DETECTION_THRESHOLDS[1]:
-                self.log.error(
-                    'Obstacle detected '  
-                    f' {OBSTACLE_DETECTION_THRESHOLDS[1]} times'
-                )
+                self.log.error('Obstacle severity 2')
                 await self.gary_play_audio_predefined(
                     audio=SOUNDS_OBSTACLES_DETECTED[1],
                     animation_head_leds=LEDS_NOTIFY_OBSTACLE,
                 )
             elif self.__obstacle_tries >= OBSTACLE_DETECTION_THRESHOLDS[0]:
-                self.log.error(
-                    'Obstacle detected '
-                    f'{OBSTACLE_DETECTION_THRESHOLDS[0]} times'
-                )
+                self.log.error('Obstacle severity 1')
                 await self.gary_play_audio_predefined(
                     audio=SOUNDS_OBSTACLES_DETECTED[0],
                     animation_head_leds=LEDS_NOTIFY_OBSTACLE

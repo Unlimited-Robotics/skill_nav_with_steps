@@ -46,6 +46,9 @@ class Transitions(CommonTransitions):
                 self.app.log.debug(
                     'The door is closed, waiting for it to open'
                 )
+                await self.helpers.gary_play_audio_predefined(
+                    audio=SOUND_OPEN_DOOR_REQUEST,
+                )
                 try:
                     await self.app.ui.show_animation(
                         **self.helpers._fsm.step.custom_ui_screen,
@@ -54,10 +57,6 @@ class Transitions(CommonTransitions):
                 except FileNotFoundError as e:
                     self.log.error(f'Error showing animation: {e}')
                 self._door_was_close = True
-            else:
-                await self.helpers.gary_play_audio_predefined(
-                    audio=SOUND_OPEN_DOOR_REQUEST,
-                )
 
     
     async def NAVIGATE_THROUGH_DOOR(self):
@@ -74,9 +73,10 @@ class Transitions(CommonTransitions):
             # 116 nav could compute a path
             if nav_error[0] == 0:
                 self.set_state('END')
-            elif nav_error[0] == 116 and await self.helpers.tag_door_visible(
+            elif await self.helpers.tag_door_visible(
                 default_tag=self.helpers._fsm.step.tags_ids[0]
             ):
+                self.log.debug('The navigation failed, waiting for the door to open...')
                 self.set_state('WAIT_FOR_DOOR_OPEN')
             else:
                 self.log.error(f'Navigation error: \'{nav_error}\'')
