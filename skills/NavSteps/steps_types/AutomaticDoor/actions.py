@@ -34,8 +34,7 @@ class Actions(CommonActions):
 
 
     async def leave_WAIT_FOR_DOOR_OPEN(self):
-        await self.helpers.custom_cancel_sound()
-        await self.helpers.custom_turn_off_leds()
+        pass
 
 
     async def enter_NAVIGATE_THROUGH_DOOR(self):
@@ -58,8 +57,7 @@ class Actions(CommonActions):
 
     
     async def leave_NAVIGATE_THROUGH_DOOR(self):
-        await self.helpers.custom_cancel_sound()
-        await self.helpers.custom_turn_off_leds()
+        pass
 
     
     async def enter_END(self):

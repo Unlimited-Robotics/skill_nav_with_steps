@@ -14,12 +14,14 @@ from raya.enumerations import LEDS_EXECUTION_CONTROL, UI_THEME_TYPE
 from raya.enumerations import UI_ANIMATION_TYPE
 
 SOUND_OBSTACLE_DETECTED_1 = {
-        'path': 'res:Clear_the_way.mp3',
+        'name': 'clear_the_way_1',
         'volume': 100,
+        'duration': 2.0,
     }
 SOUND_OBSTACLE_DETECTED_2 = {
-        'path': 'res:Clear_the_way2.mp3',
+        'name': 'clear_the_way_2',
         'volume': 100,
+        'duration': 6.0,
     }
 
 SOUNDS_OBSTACLES_DETECTED = [
@@ -32,7 +34,7 @@ LEDS_NOTIFY_OBSTACLE = {
     'color': 'YELLOW',
     'animation': 'MALFUNCTION_VER_1',
     'speed': 1,
-    'repetitions': 0,
+    'repetitions': 1,
     'execution_control': LEDS_EXECUTION_CONTROL.OVERRIDE,
 }
 

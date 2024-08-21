@@ -8,13 +8,15 @@ DOOR_TAG_TIMEOUT = 3.0
 from raya.enumerations import UI_THEME_TYPE, LEDS_EXECUTION_CONTROL
 
 SOUND_OPEN_DOOR_REQUEST = {
-        'path': 'res:Open_door.mp3',
+        'name': 'open_door_1',
         'volume': 100,
+        'duration': 4.0,
     }
 
 SOUND_OPEN_DOOR_THANKS = {
-        'path': 'res:Thank_you_door.mp3',
+        'name': 'thank_you_door_1',
         'volume': 100,
+        'duration': 3.0,
     }
 
 LEDS_DOOR_OPENED = {
@@ -38,4 +40,4 @@ UI_SCREEN_WAIT_FOR_DOOR_OPEN = {
     **UI_COMMON_OPTIONS
 }
 
-DELAY_AFTER_DOOR_OPENED = 2.0
+DELAY_AFTER_DOOR_OPENED = 5.0

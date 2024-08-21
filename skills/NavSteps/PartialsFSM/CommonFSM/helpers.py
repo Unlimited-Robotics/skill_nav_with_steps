@@ -3,10 +3,13 @@ if typing.TYPE_CHECKING:
     from src.app import RayaApplication
     from . import CommonFSM
 
+import math
+
 from raya.logger import RaYaLogger
 from raya.exceptions import RayaCommandAlreadyRunning, RayaFileDoesNotExist, RayaCommandTimeout
 
-from .constants import DELAY_BEETWEEN_SOUND_LOOP, LEDS_GARY_SPEAKING
+from .constants import DELAY_BEETWEEN_SOUND_LOOP, DURATION_SOUND_LOOP
+from .constants import LEDS_GARY_SPEAKING
 
 
 class CommonHelpers():
@@ -103,6 +106,30 @@ class CommonHelpers():
         except RayaCommandTimeout:
             pass
 
+
+    async def gary_play_audio_predefined(self, 
+            audio: dict, 
+            animation_head_leds: dict = LEDS_GARY_SPEAKING,
+            wait: bool = False
+        ):
+        audio_length = audio.pop('duration', 0)
+        repetitions = math.ceil( audio_length /  DURATION_SOUND_LOOP)
+        self.log.debug('Playing audio')
+        self.log.debug(f'Audio Name: {audio["name"]}')
+        self.log.debug(f'Audio length: {audio_length}')
+        self.log.debug(f'Repetitions: {repetitions}')
+        
+        await self.app.sound.play_sound(
+            **audio,
+            wait=False,
+            callback_finish=self.sound_finish_callback
+        )
+        await self.custom_animation(
+            **animation_head_leds,
+            repetitions=repetitions,
+            wait=False
+        )
+
     
     async def nav_feedback_async(self, code, msg, distance, speed):
         # if code == 241:
@@ -118,7 +145,6 @@ class CommonHelpers():
             f'nav_finish_async: {code}, {msg}'
         )
         self.last_result = code, msg
-        await self.custom_cancel_sound()
         await self.custom_turn_off_leds()
 
 

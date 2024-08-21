@@ -66,5 +66,4 @@ class Actions(RetryActions):
         
     
     async def leave_NAVIGATING_TO_POINT(self):
-        await self.helpers.custom_turn_off_leds()
-        await self.helpers.custom_cancel_sound()
+        pass

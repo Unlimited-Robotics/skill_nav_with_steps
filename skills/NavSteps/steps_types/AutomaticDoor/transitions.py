@@ -33,16 +33,13 @@ class Transitions(CommonTransitions):
                 self.app.log.debug(
                     'The door is open, navigating through it...'
                 )
-                await self.helpers.custom_cancel_sound()
-                await self.helpers.custom_turn_off_leds()
                 
-                await self.helpers.gary_play_audio(
+                await self.helpers.gary_play_audio_predefined(
                     audio=SOUND_OPEN_DOOR_THANKS,
                     animation_head_leds=LEDS_DOOR_OPENED,
                 )
                 self._door_was_close = False
                 await self.app.sleep(DELAY_AFTER_DOOR_OPENED)
-                # TODO: set last correct ui screen
             self.set_state('NAVIGATE_THROUGH_DOOR')
         else:
             if self._door_was_close == False:
@@ -58,7 +55,7 @@ class Transitions(CommonTransitions):
                     self.log.error(f'Error showing animation: {e}')
                 self._door_was_close = True
             else:
-                await self.helpers.gary_play_audio(
+                await self.helpers.gary_play_audio_predefined(
                     audio=SOUND_OPEN_DOOR_REQUEST,
                 )
 

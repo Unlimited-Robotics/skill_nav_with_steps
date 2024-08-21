@@ -53,8 +53,6 @@ class Helpers(RetryHelpers):
                         'resetting obstacle tries to 0'
                     )
                 self.__obstacle_tries = 0
-                await self.custom_turn_off_leds()
-                await self.custom_cancel_sound()
             
             if self.__navigating_leds_on is False:
                 await self.app.ui.show_last_animation()
@@ -77,7 +75,7 @@ class Helpers(RetryHelpers):
                     'Obstacle detected more than' 
                     f' {OBSTACLE_DETECTION_THRESHOLDS[1]} times'
                 )
-                await self.gary_play_audio(
+                await self.gary_play_audio_predefined(
                     audio=SOUNDS_OBSTACLES_DETECTED[1],
                     animation_head_leds=LEDS_NOTIFY_OBSTACLE,
                 )
@@ -86,13 +84,10 @@ class Helpers(RetryHelpers):
                     'Obstacle detected more than '
                     f'{OBSTACLE_DETECTION_THRESHOLDS[0]} times'
                 )
-                await self.gary_play_audio(
+                await self.gary_play_audio_predefined(
                     audio=SOUNDS_OBSTACLES_DETECTED[0],
                     animation_head_leds=LEDS_NOTIFY_OBSTACLE
                 )
-        
-            if not self.app.sound.is_playing():
-                await self.custom_turn_off_leds()
 
 
     async def nav_finish_async(self, code, msg):
