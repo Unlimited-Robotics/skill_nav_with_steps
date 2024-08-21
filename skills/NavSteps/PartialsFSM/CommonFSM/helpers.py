@@ -69,7 +69,7 @@ class CommonHelpers():
 
 
     def sound_finish_callback(self, code, msg):
-        self.log.debug(f'Audio finished with code: {code}, msg: {msg}')
+        pass
 
     
     async def gary_play_audio(self, 
