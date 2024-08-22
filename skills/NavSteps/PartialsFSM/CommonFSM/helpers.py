@@ -20,7 +20,8 @@ class CommonHelpers():
         self._fsm: CommonFSM
         self.log: RaYaLogger
 
-        self.last_result = -1, 'You should not see this message'
+        self.default_last_result = -1, 'You should not see this message'
+        self.last_result = self.default_last_result
 
 
     def __setattr__(self, name, value):
@@ -141,8 +142,12 @@ class CommonHelpers():
 
     
     async def nav_feedback_async(self, code, msg, distance, speed):
+        if code == 0:
+            self.last_result = self.default_last_result
+        
         # if code == 241:
         #     return
+        
         self.log.debug(
             'nav_feedback_async: '
             f'{code}, {msg}, {distance}, {speed}'

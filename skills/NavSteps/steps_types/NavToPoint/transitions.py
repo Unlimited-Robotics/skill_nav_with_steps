@@ -63,13 +63,13 @@ class Transitions(RetryTransitions):
 
 
     async def NAVIGATING_TO_POINT_FAILED(self):
-        if self.helpers._fsm.step.teleoperator_if_fail:
-            if len(self.helpers._fsm.step.points) == 1:
+        if len(self.helpers._fsm.step.points) == 1:
+            if self.helpers._fsm.step.teleoperator_if_fail:
                 self.helpers.retry_step(
                     last_state='NAVIGATING_TO_POINT',
                     timeout=self.helpers._fsm.step.teleoperator_timeout,
                     transitions=self,
                 )
-            else:
-                self.helpers._fsm.step.points.pop(0)
-        self.set_state('NAVIGATING_TO_POINT')
+        else:
+            self.helpers._fsm.step.points.pop(0)
+            self.set_state('NAVIGATING_TO_POINT')

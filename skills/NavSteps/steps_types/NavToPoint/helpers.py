@@ -23,25 +23,29 @@ class Helpers(RetryHelpers):
         
         self.last_code = -1
         self.remaining_distance = -1
-        
         self.listen_feedback = False
 
 
+    def reset_last_nav(self):
+        self.listen_feedback = False
+        self.remaining_distance = -1
+
+
     async def nav_feedback_async(self, code, msg, distance, speed):
+        if code in [0, 1, 4]:
+            self.listen_feedback = True
+        if not self.listen_feedback:
+            return
+        
         await super().nav_feedback_async(
             code=code, 
             msg=msg, 
             distance=distance, 
             speed=speed
         )
-        if code in [4, 0]:
-            self.listen_feedback = True
-        
-        if self.listen_feedback == False:
-            return
         
         self.remaining_distance = distance
-        if self.last_code == code:
+        if self.last_code == code and code not in NAV_CODES_IS_NAVIGATING:
             return
         else:
             self.last_code = code
