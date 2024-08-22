@@ -38,6 +38,7 @@ class Actions(CommonActions):
     async def leave_WAIT_FOR_DOOR_OPEN(self):
         try:
             self.app.cancel_task(name=self.helpers.task_timer_call_for_help)
+            self.log.warn('Task for calling the user was canceled')
         except RayaTaskNotRunning:
             pass
 
