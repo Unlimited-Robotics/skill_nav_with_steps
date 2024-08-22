@@ -2,7 +2,7 @@
     "name": "nav_with_steps",
     "description": "",
     "type": "skill",
-    "version": "0.0.0.dev2",
+    "version": "0.0.0.dev3",
     "dependencies": {
         "pip": [],
         "skills": [
