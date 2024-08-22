@@ -5,6 +5,9 @@ if typing.TYPE_CHECKING:
 
 import datetime
 
+import numpy as np
+import tf_transformations
+
 from raya.handlers.cv.detectors.tags_detector_handler import \
                                                             TagsDetectorHandler
 from raya.exceptions import RayaFleetTimeout
@@ -122,6 +125,25 @@ class Helpers(CommonHelpers):
                 'last_time': datetime.datetime.min,
             }
 
+    def get_tag_info_rotation(self, tag):
+        orientation = tag["pose_base_link"].pose.orientation
+        quat = [0,0,0,0]
+        quat[0] = orientation.x
+        quat[1] = orientation.y
+        quat[2] = orientation.z
+        quat[3] = orientation.w
+        orientation = tf_transformations.euler_from_quaternion(quat)
+        orientation = np.rad2deg(orientation)
+        yaw_offset = 180.0
+        orientation[2] += yaw_offset
+
+        # Normalize the yaw value to be within the range -180 to 180 degrees
+        if orientation[2] > 180:
+            orientation[2] -= 360
+        elif orientation[2] < -180:
+            orientation[2] += 360
+        return orientation
+
 
     def _door_state_tag_listener(self, detections, image):
         if self.__readyDetectorFlag is False:
@@ -130,11 +152,18 @@ class Helpers(CommonHelpers):
         if detections:
             for tag in detections:
                 tag_id = tag['tag_id']
+                orientation = self.get_tag_info_rotation(tag=tag)
+                            
                 if tag_id in self._fsm.step._door_tags[f'tag{self._fsm.step.tags_family}']:
-                    self.__tags[tag_id] = {
-                        'visible': True,
-                        'last_time': datetime.datetime.now(),
-                    }
+                    if abs(orientation[2]) < self._fsm.step.range_degrees_tag_visible:
+                        # self.log.debug((
+                        #     f'Tag {tag_id} detected within range '
+                        #     f'yaw:{orientation[2]:.2f}'
+                        # ))
+                        self.__tags[tag_id] = {
+                            'visible': True,
+                            'last_time': datetime.datetime.now(),
+                        }
 
 
     async def tag_door_visible(self, default_tag: int = -1):

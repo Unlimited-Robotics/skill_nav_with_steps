@@ -13,6 +13,8 @@ class AutomaticDoor:
             tags_ids: list,
             tags_sizes: list,
             tags_family: str = '36h11',
+            range_degrees_tag_visible: int = RANGE_DEGREES_TAG_VISIBLE,
+            
             timeout: float = 60.0,
             custom_ui_screen: dict = UI_SCREEN_WAIT_FOR_DOOR_OPEN,
             phone_call_timeout: float = -1.0,
@@ -36,6 +38,7 @@ class AutomaticDoor:
         self.tags_ids = tags_ids
         self.tags_family = tags_family
         self.tags_sizes = tags_sizes
+        self.range_degrees_tag_visible = range_degrees_tag_visible
         self.timeout = timeout
         self.custom_ui_screen = custom_ui_screen
         self.door_tag_timeout = door_tag_timeout
