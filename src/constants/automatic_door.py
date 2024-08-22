@@ -14,9 +14,9 @@ TEST_POINT_OPTIONS = {
     },
 }
 
-TAGS_IDS = [25]
+TAGS_IDS = [17]
 TAGS_FAMILY = '36h11'
-TAGS_SIZE = [0.12]
+TAGS_SIZE = [0.10]
 
 AUTOMATIC_DOOR_EXAMPLE = {
     'name': 'automatic door example',
@@ -29,6 +29,19 @@ AUTOMATIC_DOOR_EXAMPLE = {
     'tags_ids': TAGS_IDS,
     'tags_family': TAGS_FAMILY,
     'tags_sizes': TAGS_SIZE,
+    # 'timeout': -1.0,
+}
+
+AUTOMATIC_DOOR_WITH_CALL_EXAMPLE ={
+    'name': 'call door example',
+    'type': 'automatic_door',
+    'zone_name': 'warehouse',
+    'after_door_point': {**TEST_POINT},
+    'tags_ids': TAGS_IDS,
+    'tags_family': TAGS_FAMILY,
+    'tags_sizes': TAGS_SIZE,
+    'phone_call_user_id': '[user_id]',
+    # 'phone_call_timeout': 20.0,
     # 'timeout': -1.0,
 }
 

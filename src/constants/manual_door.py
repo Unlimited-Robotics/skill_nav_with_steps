@@ -8,9 +8,9 @@ TEST_POINT = {
     'ang_unit': ANGLE_UNIT.DEGREES,
 }
 
-TAGS_IDS = [25]
+TAGS_IDS = [18]
 TAGS_FAMILY = '36h11'
-TAGS_SIZE = [0.12]
+TAGS_SIZE = [0.10]
 
 MANUAL_DOOR_EXAMPLE ={
     'name': 'manual_door example',

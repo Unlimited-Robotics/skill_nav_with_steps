@@ -57,12 +57,9 @@ class RayaApplication(RayaApplicationBase):
 
     async def main(self):
         execute_args = {
-            # 'args': {
-            #     'unit1_user_id': '1',
-            #     'unit2_user_id': '2',
-            #     'unit3_user_id': '3',
-            #     'unit4_user_id': '4',
-            # },
+            'args': {
+                'user_id': '0e89dc8f-a2c9-4288-ae7b-69946afa4557',
+            },
             'steps': EXAMPLE_STEPS
         }
         await self.skill_nav_steps.execute_main(
