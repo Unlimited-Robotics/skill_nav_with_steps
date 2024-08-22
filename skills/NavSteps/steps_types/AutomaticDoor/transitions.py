@@ -33,19 +33,25 @@ class Transitions(CommonTransitions):
                 self.app.log.debug(
                     'The door is open, navigating through it...'
                 )
-                
+                SOUND_THANKS_DOOR_AUDIO['name'] = \
+                    self.helpers._fsm.step.sound_thanks_door_name
+                LEDS_DOOR_OPENED['animation'] = \
+                    self.helpers._fsm.step.leds_door_open_animation
                 await self.helpers.gary_play_audio_predefined(
-                    audio=SOUND_OPEN_DOOR_THANKS,
+                    audio=SOUND_THANKS_DOOR_AUDIO,
                     animation_head_leds=LEDS_DOOR_OPENED,
                 )
                 self._door_was_close = False
-                await self.app.sleep(DELAY_AFTER_DOOR_OPENED)
+                await self.app.sleep(\
+                    self.helpers._fsm.step.delay_after_door_opened
+                )
             self.set_state('NAVIGATE_THROUGH_DOOR')
         else:
             if self._door_was_close == False:
                 self.app.log.debug(
                     'The door is closed, waiting for it to open'
                 )
+                SOUND_OPEN_DOOR_REQUEST['name'] = self.helpers._fsm.step.sound_open_door_name
                 await self.helpers.gary_play_audio_predefined(
                     audio=SOUND_OPEN_DOOR_REQUEST,
                 )
@@ -63,14 +69,11 @@ class Transitions(CommonTransitions):
         if await self.app.nav.is_in_zone(
                 zone_name=self.helpers._fsm.step.zone_name
             ) != self.helpers.withinInitialZone:
-            # if robot leaves or enters the zone, the skill ends
             self.log.debug('Robot left/enter the zone, ending skill...')
             self.set_state('END')
         
         if not self.app.nav.is_navigating():
             nav_error = self.helpers.get_last_result()
-            # 18 nav was canceled 
-            # 116 nav could compute a path
             if nav_error[0] == 0:
                 self.set_state('END')
             elif await self.helpers.tag_door_visible(

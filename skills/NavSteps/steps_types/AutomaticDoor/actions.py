@@ -3,6 +3,7 @@ if typing.TYPE_CHECKING:
     from src.app import RayaApplication
 
 from raya.exceptions import RayaNavAlreadyNavigating
+from raya.exceptions import RayaTaskNotRunning
 
 from ..CommonType import CommonActions
 
@@ -22,27 +23,26 @@ class Actions(CommonActions):
         self.helpers.withinInitialZone = await self.app.nav.is_in_zone(
                 zone_name=self.helpers._fsm.step.zone_name
             )
-        self.log.warn('1')
         await self.helpers.enable_cameras()
-        self.log.warn('2')
         await self.helpers._enable_door_detection()
-        self.log.warn('3')
 
 
     async def enter_WAIT_FOR_DOOR_OPEN(self):
-        pass
+        self.log.debug('Creating task for calling the user')
+        self.app.create_task(
+            name=self.helpers.task_timer_call_for_help,
+            afunc=self.helpers.call_task
+        )
 
 
     async def leave_WAIT_FOR_DOOR_OPEN(self):
-        pass
+        try:
+            self.app.cancel_task(name=self.helpers.task_timer_call_for_help)
+        except RayaTaskNotRunning:
+            pass
 
 
     async def enter_NAVIGATE_THROUGH_DOOR(self):
-        # if self.app.nav.is_navigating():
-        #     await self.app.nav.update_current_nav_goal(
-        #         **self.helpers._fsm.step.after_door_point.get_only_coordinates(),
-        #     )
-        # else:
         point = self.helpers._fsm.step.after_door_point.to_dict()
         self.log.debug(f'Navigating to point: {point}')
         try:

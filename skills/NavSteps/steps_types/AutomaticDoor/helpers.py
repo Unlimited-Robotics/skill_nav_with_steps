@@ -7,7 +7,7 @@ import datetime
 
 from raya.handlers.cv.detectors.tags_detector_handler import \
                                                             TagsDetectorHandler
-from raya.exceptions import RayaTaskNotRunning
+from raya.exceptions import RayaFleetTimeout
 
 from ..CommonType import CommonHelpers
 
@@ -25,6 +25,44 @@ class Helpers(CommonHelpers):
         self.__tags = dict()
         self.__readyDetectorFlag = False
         self.withinInitialZone = False
+        
+        self.__door_open_timeout = datetime.datetime.now()
+        self.task_timer_call_for_help = 'timer_call_for_help'
+
+
+    async def start_door_close_timeout(self):
+        self.__door_open_timeout = datetime.datetime.now()
+
+
+    async def check_door_close_timeout(self):
+        if self.__door_open_timeout - datetime.datetime.now() > \
+                datetime.timedelta(seconds=self._fsm.step.door_close_timeout):
+            return True
+        return False
+
+
+    async def call_task(self):
+        await self.app.sleep(self._fsm.step.time_before_first_call)
+        self.log.warn('Starting to call the user...')
+        while True:
+            user = self._fsm.step.phone_call_user_id
+            self.log.warn(f'Calling the user \'{user}\'...')
+            FLEET_REQUEST_USER_ACTION['request_args']['message'] = \
+                self._fsm.step.fleet_call_message
+            try:
+                await self.app.fleet.request_user_action(
+                        user_id=user,
+                        wait=True,
+                        **FLEET_REQUEST_USER_ACTION,
+                    )
+            except RayaFleetTimeout:
+                pass
+
+            await self.app.sleep(self._fsm.step.time_beetween_calls)
+            self.log.debug((
+                'Calling again... '
+                f'after {self._fsm.step.time_beetween_calls} seconds.'
+            ))
 
 
     async def enable_cameras(self):
@@ -105,7 +143,9 @@ class Helpers(CommonHelpers):
             now = datetime.datetime.now()
             delta = now - last 
             # self.log.debug(f'delta {delta}')
-            return delta < datetime.timedelta(seconds=DOOR_TAG_TIMEOUT)
+            return delta < datetime.timedelta(
+                seconds=self._fsm.step.door_tag_timeout
+            )
     
         # Check if any of the tags is visible
         # if any([self._tags[tag]['last_time'] == True for tag in self._fsm.step.tags_ids]):
