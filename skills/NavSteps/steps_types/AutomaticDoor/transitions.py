@@ -42,9 +42,9 @@ class Transitions(CommonTransitions):
                     animation_head_leds=LEDS_DOOR_OPENED,
                 )
                 self._door_was_close = False
-                # await self.app.sleep(\
-                #     self.helpers._fsm.step.delay_after_door_opened
-                # )
+                await self.app.sleep(
+                        self.helpers._fsm.step.delay_after_door_opened
+                    )
             self.set_state('NAVIGATE_THROUGH_DOOR')
         else:
             if self._door_was_close == False:
