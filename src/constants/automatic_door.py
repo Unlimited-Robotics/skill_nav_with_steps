@@ -41,6 +41,10 @@ AUTOMATIC_DOOR_WITH_CALL_EXAMPLE ={
     'tags_family': TAGS_FAMILY,
     'tags_sizes': TAGS_SIZE,
     'phone_call_user_id': '[user_id]',
+    
+    'time_before_first_call': 10.0,
+    'time_beetween_calls': 30.0,
+    
     # 'phone_call_timeout': 20.0,
     # 'timeout': -1.0,
 }
