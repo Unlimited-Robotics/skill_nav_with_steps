@@ -50,6 +50,7 @@ class Transitions(RetryTransitions):
         self.log.error(f'nav_error_code: {nav_error}')
         if nav_error[0] == 0:
             if len(self.helpers._fsm.step.points) == 1:
+                await self.app.ui.show_last_animation()
                 self.set_state('END')
             else:
                 self.set_state('PARTIAL_NAVIGATION_REACHED')

@@ -42,13 +42,6 @@ class CommonHelpers():
         return self.get_logger()
 
 
-    async def custom_cancel_sound(self):
-        try:
-            await self.app.sound.cancel_all_sounds()
-        except Exception as e:
-            self.log.error(f'cancel_all_sounds exception {type(e)}')
-
-
     async def custom_animation(self, wait=True, **kwargs):
         try:
             await self.app.leds.animation(**kwargs, wait=wait)
@@ -112,7 +105,8 @@ class CommonHelpers():
 
     async def gary_play_audio_predefined(self, 
             audio: dict, 
-            animation_head_leds: dict = LEDS_GARY_SPEAKING
+            animation_head_leds: dict = LEDS_GARY_SPEAKING,
+            wait: bool = False
         ):
         animation_head_leds = deepcopy(animation_head_leds)
         audio = deepcopy(audio)
@@ -120,24 +114,24 @@ class CommonHelpers():
         repetitions = animation_head_leds.pop('repetitions', 1)
         if repetitions != 0:
             repetitions = math.ceil( audio_length /  DURATION_SOUND_LOOP)
-        # self.log.debug('Playing audio')
-        # self.log.debug(f'Audio Name: {audio["name"]}')
-        # self.log.debug(f'Audio length: {audio_length}')
-        # self.log.debug(f'Repetitions: {repetitions}')
         
-        try:
-            await self.app.sound.play_sound(
-                **audio,
-                wait=False,
-                callback_finish=self.sound_finish_callback
-            )
-        except Exception:
-            pass
         await self.custom_animation(
             **animation_head_leds,
             repetitions=repetitions,
             wait=False
         )
+        try:
+            await self.app.sound.play_sound(
+                **audio,
+                overwrite=True,
+                wait=False,
+                callback_finish=self.sound_finish_callback
+            )
+        except Exception as e:
+            self.log.error(f'play_sound exception {type(e)}')
+
+        if wait:
+            await self.app.sleep(audio_length)
         
 
     
