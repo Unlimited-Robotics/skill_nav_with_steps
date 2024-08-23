@@ -70,5 +70,5 @@ class Transitions(RetryTransitions):
                 timeout=self.helpers._fsm.step.teleoperator_timeout,
                 transitions=self,
             )
-        else:
+        else: 
             self.set_state('NAVIGATING_TO_POINT')
