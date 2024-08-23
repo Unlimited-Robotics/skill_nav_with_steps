@@ -1,5 +1,6 @@
 from raya.application_base import RayaApplicationBase
 from raya.exceptions import RayaSkillAborted
+from raya.exceptions import RayaCommandTimeout
 
 from skills.NavSteps import SkillNavSteps
 from .constants import EXAMPLE_STEPS
@@ -14,6 +15,19 @@ from raya.controllers.motion_controller import MotionController
 from raya.controllers.cameras_controller import CamerasController
 from raya.controllers.cv_controller import CVController
 from raya.controllers.robot_skills_controller import RobotSkillsController
+
+
+GARY_SELECTED_CART_FOOTPRINT =  [
+        [-1.22,  0.22],
+        [-0.24,  0.22],
+        [-0.24,  0.27],
+        [ 0.24,  0.27],
+        [ 0.24, -0.27],
+        [-0.24, -0.27],
+        [-0.24, -0.22],
+        [-1.22, -0.22],
+    ]
+
 
 class RayaApplication(RayaApplicationBase):
 
@@ -40,6 +54,14 @@ class RayaApplication(RayaApplicationBase):
                 await self.enable_controller('cv')
         self.robot_skills: RobotSkillsController = \
                 await self.enable_controller('robot_skills')
+
+        try:
+            await self.nav.update_robot_footprint(
+                    points=GARY_SELECTED_CART_FOOTPRINT
+                )
+            await self.nav.change_costmap(costmap_name='cost.home_elev')
+        except RayaCommandTimeout:
+            pass
 
         self.skill_nav_steps = self.register_skill(SkillNavSteps)
         

@@ -61,18 +61,27 @@ NAV_TO_POINT_ELEVATORS = {
     # 'custom_ui_screen' : {},
 }
 
+warehouse_exit = [1807, 892, 0.22435328773765226]
+wait_elevator = [2833, 706, 0.2177464694155388]
+
 NAV_TO_POINT_LIST = {
     'name': 'navigation list example',
     'type': 'nav_to_point',
     
-    'points' : [ 
-        # [ 390, 1189, 0.19944054677423476  ], 
-        # [ 572, 1151, 0.20273168849747414 ],
-        # [ 982, 1060, 0.2541843869601435  ],
-        # [ 1428, 988, 0.23974310887045658 ],
-        # [ 1627, 931, 0.22157591442968716 ],
-        [ 1761, 904, 0.22435328773765226 ],
+    # Home to Door
+    # 'points' : [ 
+    #     [654, 1123, 0.19739555984988075],
+    #     [1362, 978, 0.23501221572065709],
+    #     warehouse_exit
+    # ],
+
+    # Door to Elevator
+    'points' : [
+        # [2215, 805, 0.2055846397552597],
+        # [2524, 742, 0.2299044281319047],
+        wait_elevator
     ],
+
     'nav_options': {
         'pos_unit': POSITION_UNIT.PIXELS,
         'ang_unit': ANGLE_UNIT.RADIANS,
