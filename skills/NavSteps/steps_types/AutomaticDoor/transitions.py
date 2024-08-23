@@ -42,9 +42,11 @@ class Transitions(CommonTransitions):
                     animation_head_leds=LEDS_DOOR_OPENED,
                 )
                 self._door_was_close = False
+                self.log.debug('Before the door delay!')
                 await self.app.sleep(
                         self.helpers._fsm.step.delay_after_door_opened
                     )
+                self.log.debug('After the door delay!')
             self.set_state('NAVIGATE_THROUGH_DOOR')
         else:
             if self._door_was_close == False:
