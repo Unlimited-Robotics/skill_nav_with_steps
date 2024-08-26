@@ -106,7 +106,7 @@ class Helpers(RetryHelpers):
             )
         
         await self.app.ui.show_animation(
-            **UI_SCREEN_NAVIGATING,
+            **self._fsm.step.custom_ui_screen,
             dont_save_last_ui=True
         )
         

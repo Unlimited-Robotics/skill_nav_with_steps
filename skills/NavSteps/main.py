@@ -5,6 +5,7 @@ from raya.skills import RayaFSMSkill
 from raya.tools.fsm import RayaFSMAborted, FSM
 
 from raya.controllers.navigation_controller import NavigationController
+from raya.controllers.ui_controller import UIController
 
 from .steps_types import *
 from .constants import *
@@ -57,6 +58,8 @@ class SkillNavSteps(RayaFSMSkill):
     async def setup(self):
         self.nav:NavigationController = \
             await self.enable_controller('navigation')
+        self.ui:UIController = \
+            await self.enable_controller('ui')
         self._steps: List[Union[NavToPoint,AutomaticDoor]] = []
 
     
@@ -88,6 +91,9 @@ class SkillNavSteps(RayaFSMSkill):
     
     async def enter_SETUP_STEPS(self):
         steps_list = copy.deepcopy(self.execute_args['steps'])
+        last_ui = self.ui.get_last_ui()
+        if last_ui.keys() == 0:
+            last_ui = UI_SCREEN_NAVIGATING
         
         for step_dict in steps_list:
             step = self.replace_placeholders(
@@ -98,19 +104,29 @@ class SkillNavSteps(RayaFSMSkill):
             
             step_name = step.get('name')
             step_type = step.pop('type')
+            custom_ui_screen = step.pop('custom_ui_screen', last_ui)
             
             self.log.warn((
                 f'Initializing step... Name:\'{step_name}\', '
                 f'Type \'{step_type}\''
             ))
             if step_type == NAV_TO_POINT_TYPE_NAME:
-                nav_to_point_step = NavToPoint(**step)
+                nav_to_point_step = NavToPoint(
+                    **step, 
+                    custom_ui_screen=custom_ui_screen
+                )
                 self._steps.append(nav_to_point_step)
             elif step_type == AUTOMATIC_DOOR_TYPE_NAME:
-                automatic_door = AutomaticDoor(**step)
+                automatic_door = AutomaticDoor(
+                    **step,
+                    custom_ui_screen=custom_ui_screen
+                )
                 self._steps.append(automatic_door)
             elif step_type == TELEOPERATION_TYPE_NAME:
-                teleoperation = Teleoperation(**step)
+                teleoperation = Teleoperation(
+                    **step,
+                    custom_ui_screen=custom_ui_screen
+                )
                 self._steps.append(teleoperation)
             elif step_type == TEST_TYPE_NAME:
                 test = CommonType(

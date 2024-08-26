@@ -13,3 +13,11 @@ UI_CALL_TO_ACTION_TELEOPERATION_DONE = {
     'button_text': 'Done ✅',
     **UI_COMMON_OPTIONS
 }
+
+UI_LOTTIE_DELIVERING_PACKAGE = 'res:lottie_package_walking.json'
+
+UI_SCREEN_NAVIGATING = {
+    'title':'Hello! I\'m Gary, your delivery robot',
+    'lottie': UI_LOTTIE_DELIVERING_PACKAGE,
+    **UI_COMMON_OPTIONS
+}

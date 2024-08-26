@@ -54,7 +54,10 @@ class Actions(CommonActions):
             )
         except RayaNavAlreadyNavigating:
             self.log.error('RayaNavAlreadyNavigating')
-        await self.app.ui.show_last_animation()
+        await self.app.ui.show_animation(
+            **self.helpers._fsm.step.custom_ui_screen,
+            dont_save_last_ui=True
+        )
 
     
     async def leave_NAVIGATE_THROUGH_DOOR(self):
