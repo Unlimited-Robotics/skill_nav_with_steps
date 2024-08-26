@@ -105,7 +105,7 @@ class Helpers(RetryHelpers):
                 wait=True,
             )
         
-        await self.app.ui.show_animation(
+        await self.app.ui._send_component_request(
             **self._fsm.step.custom_ui_screen,
             dont_save_last_ui=True
         )

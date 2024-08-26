@@ -54,7 +54,7 @@ class Actions(CommonActions):
             )
         except RayaNavAlreadyNavigating:
             self.log.error('RayaNavAlreadyNavigating')
-        await self.app.ui.show_animation(
+        await self.app.ui._send_component_request(
             **self.helpers._fsm.step.custom_ui_screen,
             dont_save_last_ui=True
         )
