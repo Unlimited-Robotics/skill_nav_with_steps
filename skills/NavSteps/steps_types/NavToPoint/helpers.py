@@ -3,8 +3,7 @@ if typing.TYPE_CHECKING:
     from src.app import RayaApplication
     from . import NavToPointFSM
 
-import time
-
+from raya.exceptions import RayaTaskNotRunning
 from raya.exceptions import RayaTaskAlreadyRunning
 
 from ...PartialsFSM.RetryState import Helpers as RetryHelpers
@@ -20,7 +19,7 @@ class Helpers(RetryHelpers):
         self._fsm: NavToPointFSM = None
         
         self.task_interaction_name = 'task_interaction'
-        self.__obstacle_detected = False
+        self._obstacle_detected = False
         
         self.last_code = -1
         self.reset_last_nav()
@@ -51,11 +50,11 @@ class Helpers(RetryHelpers):
             self.first_try_plan = True
         
         if code in NAV_CODES_IS_NAVIGATING:
-            self.__obstacle_detected = False
+            self._obstacle_detected = False
 
         if code in NAV_CODES_OBSTACLE_DETECTED:
             if self.first_try_plan:
-                self.__obstacle_detected = True
+                self._obstacle_detected = True
                 try:
                     self.app.create_task(
                         name=self.task_interaction_name,
@@ -66,9 +65,14 @@ class Helpers(RetryHelpers):
 
 
     async def nav_finish_async(self, code, msg):
-        self.__obstacle_detected = False
+        self._obstacle_detected = False
+        try:
+            self.app.cancel_task(name=self.task_interaction_name)
+        except RayaTaskNotRunning:
+            pass
+        else:
+            self.log.warn('Obstacle task canceled')
         await super().nav_finish_async(code=code, msg=msg)
-        await self.custom_turn_off_leds()
 
 
 
@@ -78,16 +82,16 @@ class Helpers(RetryHelpers):
         
         one_clear_way_flag = False
         
-        while self.__obstacle_detected:
+        while self._obstacle_detected:
             
             for _ in range(6): # 3 seconds
                 await self.app.sleep(0.5)
-                if not self.__obstacle_detected:
+                if not self._obstacle_detected:
                     if not one_clear_way_flag:
                         self.log.warn('aborted')
                         return
                     break
-            if not self.__obstacle_detected:
+            if not self._obstacle_detected:
                 self.log.warn('skipped')
                 break
             
@@ -120,6 +124,12 @@ class Helpers(RetryHelpers):
         await self.app.sleep(1.0)
 
 
-    async def nav_finish_async(self, code, msg):
-        await super().nav_finish_async(code=code, msg=msg)
-        await self.custom_turn_off_leds()
+    async def show_last_nav(self):
+        await self.app.ui._send_component_request(
+            **self._fsm.step.custom_ui_screen,
+            dont_save_last_ui=True
+        )
+        await self.app.leds.animation(
+            **LEDS_NAVIGATING, 
+            wait=False
+        )

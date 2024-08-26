@@ -50,10 +50,7 @@ class Transitions(RetryTransitions):
         self.log.error(f'nav_error_code: {nav_error}')
         if nav_error[0] == 0:
             if len(self.helpers._fsm.step.points) == 1:
-                await self.app.ui._send_component_request(
-                    **self.helpers._fsm.step.custom_ui_screen,
-                    dont_save_last_ui=True
-                )
+                await self.helpers.show_last_nav()
                 self.set_state('END')
             else:
                 self.set_state('PARTIAL_NAVIGATION_REACHED')
@@ -68,6 +65,7 @@ class Transitions(RetryTransitions):
 
     async def NAVIGATING_TO_POINT_FAILED(self):
         if self.helpers._fsm.step.teleoperator_if_fail:
+            await self.app.leds.turn_off_all()
             self.helpers.retry_step(
                 last_state='NAVIGATING_TO_POINT',
                 timeout=self.helpers._fsm.step.teleoperator_timeout,

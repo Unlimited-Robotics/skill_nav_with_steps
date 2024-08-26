@@ -52,7 +52,7 @@ class Actions(RetryActions):
                 )
             except RayaNavAlreadyNavigating:
                 self.log.error('RayaNavAlreadyNavigating')
-        # await self.app.ui.show_last_animation()
+        await self.helpers.show_last_nav()
 
 
     async def enter_PARTIAL_NAVIGATION_REACHED(self):
