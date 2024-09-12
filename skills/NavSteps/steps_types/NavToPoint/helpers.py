@@ -67,6 +67,7 @@ class Helpers(RetryHelpers):
 
     async def nav_finish_async(self, code, msg):
         self.__obstacle_detected = False
+        self.log.warn('Obstacle detection flag set to False')
         await super().nav_finish_async(code=code, msg=msg)
         await self.custom_turn_off_leds()
 
@@ -118,8 +119,3 @@ class Helpers(RetryHelpers):
                 wait=True,
             )
         await self.app.sleep(1.0)
-
-
-    async def nav_finish_async(self, code, msg):
-        await super().nav_finish_async(code=code, msg=msg)
-        await self.custom_turn_off_leds()
